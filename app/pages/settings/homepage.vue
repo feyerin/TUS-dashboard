@@ -6,7 +6,7 @@ import SecondCollectionCard from '../../components/settings/homepage/SecondColle
 import FeaturedProductCard from '../../components/settings/homepage/FeaturedProductCard.vue'
 
 useHead({
-  title: 'Settings • Homepage - Dashboard'
+  title: 'Homepage Settings • Dashboard'
 })
 </script>
 

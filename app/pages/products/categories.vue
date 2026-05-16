@@ -2,6 +2,10 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 
+useHead({
+  title: 'Categories • Dashboard'
+})
+
 const { getCategories, createCategory, updateCategory, deleteCategory } = useCategory()
 const { collections } = useMasterData()
 

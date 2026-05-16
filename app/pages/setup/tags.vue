@@ -5,6 +5,10 @@ import { message, Modal } from 'ant-design-vue'
 import { useTag } from '~/composables/useTag'
 import type { Tag, TagPayload, TagResponse } from '~/type/tag'
 
+useHead({
+  title: 'Tags • Dashboard'
+})
+
 const { getTags, createTag, updateTag, deleteTag } = useTag()
 
 // ================= STATE =================

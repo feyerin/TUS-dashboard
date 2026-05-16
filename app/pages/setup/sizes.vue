@@ -3,6 +3,10 @@ import { ref, onMounted, watch } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import { useSize } from '~/composables/useSize'
 
+useHead({
+  title: 'Sizes • Dashboard'
+})
+
 const {
   getSizes,
   createSize,

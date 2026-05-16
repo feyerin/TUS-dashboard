@@ -3,7 +3,7 @@ import { ref, onMounted, watch } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 
 useHead({
-  title: 'Product • Dashboard'
+  title: 'Home • Dashboard'
 })
 
 const config = useRuntimeConfig()

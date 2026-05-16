@@ -4,6 +4,10 @@ import { message, Modal } from 'ant-design-vue'
 import type { TablePaginationConfig, UploadProps } from 'ant-design-vue'
 import type { BrandItem } from '~/type/brand'
 
+useHead({
+  title: 'Brands • Dashboard'
+})
+
 const { uploadImage } = useUpload()
 const { getBrands, createBrand, updateBrand, deleteBrand } = useBrand()
 const { formatDate } = useFormatter()

@@ -1,6 +1,7 @@
 <script setup lang="ts">
+
 useHead({
-  title: 'Create Product'
+  title: 'Create product • Dashboard'
 })
 
 const {

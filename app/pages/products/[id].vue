@@ -5,7 +5,7 @@ import { message } from 'ant-design-vue'
 const route = useRoute()
 
 useHead({
-  title: 'Edit Product'
+  title: 'Edit product • Dashboard'
 })
 
 const {

@@ -5,6 +5,10 @@ import { useColor } from '~/composables/useColor'
 import type { Color, ColorPayload } from '~/type/color'
 import type { ApiResponse } from '~/type/api'
 
+useHead({
+  title: 'Colors • Dashboard'
+})
+
 const { getColors, createColor, updateColor, deleteColor } = useColor()
 
 // ================= STATE =================

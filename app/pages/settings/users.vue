@@ -3,6 +3,10 @@ import { ref, onMounted, watch } from 'vue'
 import { message, Modal, Tag } from 'ant-design-vue'
 import { useUser } from '~/composables/useUser'
 
+useHead({
+  title: 'Users • Dashboard'
+})
+
 // ================= API =================
 const {
   getUsers,

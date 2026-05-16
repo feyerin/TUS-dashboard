@@ -2,6 +2,10 @@
 import { ref } from 'vue'
 import { message } from 'ant-design-vue'
 
+useHead({
+  title: 'General Settings • Dashboard'
+})
+
 // ================= TYPES =================
 interface GeneralSettings {
   email: string
