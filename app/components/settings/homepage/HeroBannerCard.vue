@@ -1,11 +1,6 @@
 <script setup lang="ts">
-import {
-  ref,
-  onMounted
-} from 'vue'
-
+import { ref, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
-
 import type { UploadFile } from 'ant-design-vue'
 
 type UploadResponse = {
@@ -240,7 +235,8 @@ onMounted(async () => {
         <p class="text-sm text-gray-500 mb-4">
           Upload dan drag gambar
           untuk mengatur urutan
-          banner
+          banner <span class="italic">(recommended size 1456 x 3000)</span>
+
         </p>
 
         <a-upload

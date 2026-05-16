@@ -48,10 +48,8 @@ const fetchCollections = async () => {
       await getCollections({
         page: page.value,
         limit: limit.value,
-        search:
-          search.value || undefined,
-        deleted:
-          deleted.value === 'true'
+        name: search.value || undefined,
+        deleted: deleted.value === 'true'
       }) as CollectionResponse
 
     console.log(res.data)
@@ -173,238 +171,240 @@ onMounted(fetchCollections)
 </script>
 
 <template>
-  <div class="space-y-6">
+  <client-only>
+    <div class="space-y-6">
 
-    <!-- HEADER -->
-    <div class="bg-white rounded-xl">
-      <a-page-header
-        title="Collections"
-        sub-title="Manage product collections"
-        class="rounded-xl"
-      >
-        <template #breadcrumb>
-          <a-breadcrumb>
-            <a-breadcrumb-item>Dashboard</a-breadcrumb-item>
-            <a-breadcrumb-item>Collections</a-breadcrumb-item>
-          </a-breadcrumb>
-        </template>
-
-        <template #extra>
-          <a-button
-            type="primary"
-            @click="openCreateModal"
-            class="flex items-center gap-2"
-          >
-            <Icon name="i-heroicons-plus-circle-20-solid" />
-            Add Collection
-          </a-button>
-        </template>
-      </a-page-header>
-    </div>
-
-    <!-- TABLE CARD -->
-    <a-card class="rounded-2xl border-0 shadow-sm">
-
-      <div class="flex flex-col gap-5">
-
-        <!-- FILTER BAR -->
-        <div
-          class="flex flex-col lg:flex-row gap-3 lg:items-center"
+      <!-- HEADER -->
+      <div class="bg-white rounded-xl">
+        <a-page-header
+          title="Collections"
+          sub-title="Manage product collections"
+          class="rounded-xl"
         >
+          <template #breadcrumb>
+            <a-breadcrumb>
+              <a-breadcrumb-item>Dashboard</a-breadcrumb-item>
+              <a-breadcrumb-item>Collections</a-breadcrumb-item>
+            </a-breadcrumb>
+          </template>
 
-          <!-- SEARCH -->
-          <a-input
-            v-model:value="search"
-            placeholder="Search collections..."
-            allow-clear
-            class="flex-1"
+          <template #extra>
+            <a-button
+              type="primary"
+              @click="openCreateModal"
+              class="flex items-center gap-2"
+            >
+              <Icon name="i-heroicons-plus-circle-20-solid" />
+              Add Collection
+            </a-button>
+          </template>
+        </a-page-header>
+      </div>
+
+      <!-- TABLE CARD -->
+      <a-card class="rounded-2xl border-0 shadow-sm">
+
+        <div class="flex flex-col gap-5">
+
+          <!-- FILTER BAR -->
+          <div
+            class="flex flex-col lg:flex-row gap-3 lg:items-center"
           >
-            <template #prefix>
-              <Icon name="lucide:search" />
-            </template>
-          </a-input>
 
-          <!-- STATUS FILTER -->
-          <a-select
-            v-model:value="deleted"
-            placeholder="Status"
-            allow-clear
-            class="w-full lg:w-44"
+            <!-- SEARCH -->
+            <a-input
+              v-model:value="search"
+              placeholder="Search collections..."
+              allow-clear
+              class="flex-1"
+            >
+              <template #prefix>
+                <Icon name="lucide:search" />
+              </template>
+            </a-input>
+
+            <!-- STATUS FILTER -->
+            <a-select
+              v-model:value="deleted"
+              placeholder="Status"
+              allow-clear
+              class="w-full lg:w-44"
+            >
+              <a-select-option value="false">
+                Active
+              </a-select-option>
+
+              <a-select-option value="true">
+                Deleted
+              </a-select-option>
+            </a-select>
+
+            <!-- ACTION -->
+            <a-button
+              class="flex-1 md:flex-none"
+              @click="resetFilter"
+            >
+              Reset
+            </a-button>
+
+            <a-button
+              type="primary"
+              class="flex-1 md:flex-none"
+              @click="applyFilter"
+            >
+              Apply
+            </a-button>
+
+          </div>
+
+          <!-- INFO ROW -->
+          <div
+            class="flex justify-between items-center text-sm text-gray-500 border-t pt-4"
           >
-            <a-select-option value="false">
-              Active
-            </a-select-option>
 
-            <a-select-option value="true">
-              Deleted
-            </a-select-option>
-          </a-select>
+            <div>
+              Showing
+              <span class="font-semibold text-black">
+                {{ collections.length }}
+              </span>
+              of
+              <span class="font-semibold text-black">
+                {{ total }}
+              </span>
+              collections
+            </div>
 
-          <!-- ACTION -->
-          <a-button
-            class="flex-1 md:flex-none"
-            @click="resetFilter"
-          >
-            Reset
-          </a-button>
-
-          <a-button
-            type="primary"
-            class="flex-1 md:flex-none"
-            @click="applyFilter"
-          >
-            Apply
-          </a-button>
-
-        </div>
-
-        <!-- INFO ROW -->
-        <div
-          class="flex justify-between items-center text-sm text-gray-500 border-t pt-4"
-        >
-
-          <div>
-            Showing
-            <span class="font-semibold text-black">
-              {{ collections.length }}
-            </span>
-            of
-            <span class="font-semibold text-black">
-              {{ total }}
-            </span>
-            collections
           </div>
 
         </div>
 
-      </div>
+        <!-- TABLE -->
+        <a-table
+          class="mt-5"
+          :data-source="collections"
+          :loading="loading"
+          row-key="id"
+          :pagination="{
+            current: page,
+            pageSize: limit,
+            total,
+            showSizeChanger: true
+          }"
+          @change="handleTableChange"
+        >
 
-      <!-- TABLE -->
-      <a-table
-        class="mt-5"
-        :data-source="collections"
-        :loading="loading"
-        row-key="id"
-        :pagination="{
-          current: page,
-          pageSize: limit,
-          total,
-          showSizeChanger: true
-        }"
-        @change="handleTableChange"
+          <!-- NAME -->
+          <a-table-column
+            title="Name"
+            data-index="name"
+            key="name"
+          >
+            <template #default="{ record }">
+              <span
+                class="font-medium text-gray-900"
+              >
+                {{ record.name }}
+              </span>
+            </template>
+          </a-table-column>
+
+          <!-- SLUG -->
+          <a-table-column
+            title="Slug"
+            data-index="slug"
+            key="slug"
+          >
+            <template #default="{ record }">
+              <span
+                class="text-gray-500 text-sm"
+              >
+                {{ record.slug }}
+              </span>
+            </template>
+          </a-table-column>
+
+          <!-- STATUS -->
+          <a-table-column
+            title="Status"
+            key="deleted"
+          >
+            <template #default="{ record }">
+
+              <a-tag
+                :color="
+                  record.deleted
+                    ? 'red'
+                    : 'green'
+                "
+              >
+                {{
+                  record.deleted
+                    ? 'Deleted'
+                    : 'Active'
+                }}
+              </a-tag>
+
+            </template>
+          </a-table-column>
+
+          <!-- ACTION -->
+          <a-table-column
+            title="Action"
+            key="action"
+          >
+            <template #default="{ record }">
+
+              <div class="flex gap-2">
+
+                <a-button
+                  size="small"
+                  @click="
+                    openEditModal(record)
+                  "
+                >
+                  Edit
+                </a-button>
+
+                <a-button
+                  danger
+                  size="small"
+                  @click="
+                    handleDelete(record)
+                  "
+                >
+                  Delete
+                </a-button>
+
+              </div>
+
+            </template>
+          </a-table-column>
+
+        </a-table>
+
+      </a-card>
+
+      <!-- MODAL -->
+      <a-modal
+        v-model:open="isModalOpen"
+        :title="isEditMode ? 'Edit Collection' : 'Add Collection'"
+        :confirm-loading="submitting"
+        @ok="handleSubmit"
+        @cancel="resetModal"
       >
+        <a-form layout="vertical" class="space-y-3">
 
-        <!-- NAME -->
-        <a-table-column
-          title="Name"
-          data-index="name"
-          key="name"
-        >
-          <template #default="{ record }">
-            <span
-              class="font-medium text-gray-900"
-            >
-              {{ record.name }}
-            </span>
-          </template>
-        </a-table-column>
+          <a-form-item label="Name" required>
+            <a-input v-model:value="formState.name" />
+          </a-form-item>
 
-        <!-- SLUG -->
-        <a-table-column
-          title="Slug"
-          data-index="slug"
-          key="slug"
-        >
-          <template #default="{ record }">
-            <span
-              class="text-gray-500 text-sm"
-            >
-              {{ record.slug }}
-            </span>
-          </template>
-        </a-table-column>
+          <a-form-item label="Slug">
+            <a-input v-model:value="formState.slug" />
+          </a-form-item>
 
-        <!-- STATUS -->
-        <a-table-column
-          title="Status"
-          key="deleted"
-        >
-          <template #default="{ record }">
+        </a-form>
+      </a-modal>
 
-            <a-tag
-              :color="
-                record.deleted
-                  ? 'red'
-                  : 'green'
-              "
-            >
-              {{
-                record.deleted
-                  ? 'Deleted'
-                  : 'Active'
-              }}
-            </a-tag>
-
-          </template>
-        </a-table-column>
-
-        <!-- ACTION -->
-        <a-table-column
-          title="Action"
-          key="action"
-        >
-          <template #default="{ record }">
-
-            <div class="flex gap-2">
-
-              <a-button
-                size="small"
-                @click="
-                  openEditModal(record)
-                "
-              >
-                Edit
-              </a-button>
-
-              <a-button
-                danger
-                size="small"
-                @click="
-                  handleDelete(record)
-                "
-              >
-                Delete
-              </a-button>
-
-            </div>
-
-          </template>
-        </a-table-column>
-
-      </a-table>
-
-    </a-card>
-
-    <!-- MODAL -->
-    <a-modal
-      v-model:open="isModalOpen"
-      :title="isEditMode ? 'Edit Collection' : 'Add Collection'"
-      :confirm-loading="submitting"
-      @ok="handleSubmit"
-      @cancel="resetModal"
-    >
-      <a-form layout="vertical" class="space-y-3">
-
-        <a-form-item label="Name" required>
-          <a-input v-model:value="formState.name" />
-        </a-form-item>
-
-        <a-form-item label="Slug">
-          <a-input v-model:value="formState.slug" />
-        </a-form-item>
-
-      </a-form>
-    </a-modal>
-
-  </div>
+    </div>
+  </client-only>
 </template>

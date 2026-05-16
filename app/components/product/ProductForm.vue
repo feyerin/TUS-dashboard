@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { message } from 'ant-design-vue'
+import { message, Upload } from 'ant-design-vue'
 import type { UploadFile } from 'ant-design-vue'
 import RichText from '../global/richText.vue'
 
@@ -161,6 +161,38 @@ const upload = async (
   return await uploadFile(file)
 }
 
+const beforeImageUpload = (
+  file: File
+) => {
+  const isImage =
+    [
+      'image/jpeg',
+      'image/png',
+      'image/webp'
+    ].includes(file.type)
+
+  if (!isImage) {
+    message.error(
+      'Only JPG, PNG, WEBP files are allowed!'
+    )
+
+    return Upload.LIST_IGNORE
+  }
+
+  const isLt2M =
+    file.size / 1024 / 1024 < 2
+
+  if (!isLt2M) {
+    message.error(
+      'Image must be smaller than 2MB!'
+    )
+
+    return Upload.LIST_IGNORE
+  }
+
+  return true
+}
+
 // ================= MEDIA =================
 const handleMediaUpload = async (
   options: any
@@ -306,7 +338,7 @@ const submit = () => {
     <div>
 
       <!-- HEADER -->
-      <div class="bg-[#f0f9ff] rounded-2xl mb-4 sticky top-0 z-40">
+      <div class="bg-white border border-gray-200 rounded-2xl mb-4 sticky top-0 z-40">
         <a-page-header
             :title="
             isEdit
@@ -421,6 +453,7 @@ const submit = () => {
               <a-upload
                 v-model:file-list="mediaList"
                 list-type="picture-card"
+                :before-upload="beforeImageUpload"
                 multiple
                 :custom-request="
                   handleMediaUpload
@@ -770,6 +803,7 @@ const submit = () => {
                   thumbnailList
                 "
                 list-type="picture-card"
+                :before-upload="beforeImageUpload"
                 :max-count="1"
                 :custom-request="
                   handleThumbnailUpload

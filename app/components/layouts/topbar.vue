@@ -1,6 +1,6 @@
 <template>
   <header
-    class="m-4 h-16 bg-white border border-gray-100 rounded-lg shadow-sm
+    class="m-4 h-16 bg-white border border-gray-100 rounded-full shadow-sm
     flex items-center justify-between px-4 md:px-6"
   >
 

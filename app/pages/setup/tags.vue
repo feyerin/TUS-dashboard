@@ -40,8 +40,7 @@ const fetchTags = async () => {
         page: page.value,
         limit: limit.value,
         orderBy: sort.value,
-        search:
-          search.value || undefined
+        name: search.value || undefined
       })
 
     tags.value =
@@ -227,229 +226,229 @@ onMounted(fetchTags)
 </script>
 
 <template>
-    <client-only>
-        <div class="space-y-6">
+  <client-only>
+      <div class="space-y-6">
 
-            <!-- HEADER -->
-            <div class="bg-white rounded-2xl">
+          <!-- HEADER -->
+          <div class="bg-white rounded-2xl">
 
-            <a-page-header
-                title="Tag Settings"
-                sub-title="Manage product tags"
-            >
+          <a-page-header
+              title="Tag Settings"
+              sub-title="Manage product tags"
+          >
 
-                <template #breadcrumb>
+              <template #breadcrumb>
 
-                <a-breadcrumb>
-                    <a-breadcrumb-item>
-                    Dashboard
-                    </a-breadcrumb-item>
+              <a-breadcrumb>
+                  <a-breadcrumb-item>
+                  Dashboard
+                  </a-breadcrumb-item>
 
-                    <a-breadcrumb-item>
-                    Tag Settings
-                    </a-breadcrumb-item>
-                </a-breadcrumb>
+                  <a-breadcrumb-item>
+                  Tag Settings
+                  </a-breadcrumb-item>
+              </a-breadcrumb>
 
-                </template>
+              </template>
 
-                <template #extra>
+              <template #extra>
 
-                <a-button
-                    type="primary"
-                    @click="openCreateModal"
-                >
-                    Add Tag
-                </a-button>
+              <a-button
+                  type="primary"
+                  @click="openCreateModal"
+              >
+                  Add Tag
+              </a-button>
 
-                </template>
+              </template>
 
-            </a-page-header>
+          </a-page-header>
 
-            </div>
+          </div>
 
-            <!-- TABLE -->
-            <a-card class="rounded-xl shadow-sm">
+          <!-- TABLE -->
+          <a-card class="rounded-xl shadow-sm">
 
-            <!-- FILTER -->
-            <div class="flex flex-col gap-5">
+          <!-- FILTER -->
+          <div class="flex flex-col gap-5">
 
-                <!-- FILTER BAR -->
-                <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
+              <!-- FILTER BAR -->
+              <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
 
-                <!-- SEARCH -->
-                <a-input
-                    v-model:value="search"
-                    placeholder="Search tag..."
-                    allow-clear
-                    class="flex-1"
-                >
+              <!-- SEARCH -->
+              <a-input
+                  v-model:value="search"
+                  placeholder="Search tag..."
+                  allow-clear
+                  class="flex-1"
+              >
 
-                    <template #prefix>
-                    <Icon name="lucide:search" />
-                    </template>
+                  <template #prefix>
+                  <Icon name="lucide:search" />
+                  </template>
 
-                </a-input>
+              </a-input>
 
-                <!-- SORT -->
-                <a-select
-                    v-model:value="sort"
-                    class="w-full lg:w-52"
-                >
+              <!-- SORT -->
+              <a-select
+                  v-model:value="sort"
+                  class="w-full lg:w-52"
+              >
 
-                    <a-select-option value="-created_at">
-                    Newest
-                    </a-select-option>
+                  <a-select-option value="-created_at">
+                  Newest
+                  </a-select-option>
 
-                    <a-select-option value="created_at">
-                    Oldest
-                    </a-select-option>
+                  <a-select-option value="created_at">
+                  Oldest
+                  </a-select-option>
 
-                    <a-select-option value="name">
-                    Name A-Z
-                    </a-select-option>
+                  <a-select-option value="name">
+                  Name A-Z
+                  </a-select-option>
 
-                    <a-select-option value="-name">
-                    Name Z-A
-                    </a-select-option>
+                  <a-select-option value="-name">
+                  Name Z-A
+                  </a-select-option>
 
-                </a-select>
+              </a-select>
 
-                <!-- BUTTON -->
-                <a-button
-                    class="flex-1 md:flex-none"
-                    @click="resetFilter"
-                >
-                    Reset
-                </a-button>
+              <!-- BUTTON -->
+              <a-button
+                  class="flex-1 md:flex-none"
+                  @click="resetFilter"
+              >
+                  Reset
+              </a-button>
 
-                <a-button
-                    type="primary"
-                    class="flex-1 md:flex-none"
-                    @click="applyFilter"
-                >
-                    Apply
-                </a-button>
+              <a-button
+                  type="primary"
+                  class="flex-1 md:flex-none"
+                  @click="applyFilter"
+              >
+                  Apply
+              </a-button>
 
-                </div>
+              </div>
 
-                <!-- INFO ROW -->
-                <div class="flex justify-between items-center text-sm text-gray-500 border-t pt-4">
+              <!-- INFO ROW -->
+              <div class="flex justify-between items-center text-sm text-gray-500 border-t pt-4">
 
-                <div>
-                    Showing
+              <div>
+                  Showing
 
-                    <span class="font-semibold text-black">
-                    {{ tags.length }}
-                    </span>
+                  <span class="font-semibold text-black">
+                  {{ tags.length }}
+                  </span>
 
-                    of
+                  of
 
-                    <span class="font-semibold text-black">
-                    {{ total }}
-                    </span>
+                  <span class="font-semibold text-black">
+                  {{ total }}
+                  </span>
 
-                    tags
-                </div>
+                  tags
+              </div>
 
-                </div>
+              </div>
 
-            </div>
+          </div>
 
-            <!-- TABLE -->
-            <a-table
-                :columns="columns"
-                :data-source="tags"
-                :loading="loading"
-                row-key="id"
-                class="mt-5"
-                :pagination="{
-                current: page,
-                pageSize: limit,
-                total: total,
-                showSizeChanger: true,
-                onChange: handleTableChange
-                }"
-            >
+          <!-- TABLE -->
+          <a-table
+              :columns="columns"
+              :data-source="tags"
+              :loading="loading"
+              row-key="id"
+              class="mt-5"
+              :pagination="{
+              current: page,
+              pageSize: limit,
+              total: total,
+              showSizeChanger: true,
+              onChange: handleTableChange
+              }"
+          >
 
-                <template #bodyCell="{ column, record }">
+              <template #bodyCell="{ column, record }">
 
-                <!-- NAME -->
-                <template v-if="column.key === 'name'">
+              <!-- NAME -->
+              <template v-if="column.key === 'name'">
 
-                    <div class="font-medium text-gray-800">
-                    {{ record.name }}
-                    </div>
+                  <div class="font-medium text-gray-800">
+                  {{ record.name }}
+                  </div>
 
-                </template>
+              </template>
 
-                <!-- CREATED -->
-                <template v-else-if="column.key === 'createdAt'">
+              <!-- CREATED -->
+              <template v-else-if="column.key === 'createdAt'">
 
-                    <div>
-                    {{ new Date(record.createdAt).toLocaleString() }}
-                    </div>
+                  <div>
+                  {{ new Date(record.createdAt).toLocaleString() }}
+                  </div>
 
-                </template>
+              </template>
 
-                <!-- ACTION -->
-                <template v-else-if="column.key === 'action'">
+              <!-- ACTION -->
+              <template v-else-if="column.key === 'action'">
 
-                <div class="flex gap-2">
+              <div class="flex gap-2">
 
-                    <a-button
-                        size="small"
-                        @click="openEditModal(record as Tag)"            
-                    >
-                    Edit
-                    </a-button>
+                  <a-button
+                      size="small"
+                      @click="openEditModal(record as Tag)"            
+                  >
+                  Edit
+                  </a-button>
 
-                    <a-button
-                        danger
-                        size="small"
-                        @click="handleDeleteTag(record as Tag)"            
-                    >
-                    Delete
-                    </a-button>
+                  <a-button
+                      danger
+                      size="small"
+                      @click="handleDeleteTag(record as Tag)"            
+                  >
+                  Delete
+                  </a-button>
 
-                </div>
+              </div>
 
-                </template>
+              </template>
 
-                </template>
+              </template>
 
-            </a-table>
+          </a-table>
 
-            </a-card>
+          </a-card>
 
-            <!-- MODAL -->
-            <a-modal
-            v-model:open="isModalOpen"
-            :title="isEditMode ? 'Edit Tag' : 'Add Tag'"
-            :ok-text="isEditMode ? 'Update' : 'Create'"
-            :confirm-loading="submitting"
-            @cancel="resetModal"
-            @ok="handleSubmitTag"
-            >
+          <!-- MODAL -->
+          <a-modal
+          v-model:open="isModalOpen"
+          :title="isEditMode ? 'Edit Tag' : 'Add Tag'"
+          :ok-text="isEditMode ? 'Update' : 'Create'"
+          :confirm-loading="submitting"
+          @cancel="resetModal"
+          @ok="handleSubmitTag"
+          >
 
-            <a-form layout="vertical">
+          <a-form layout="vertical">
 
-                <a-form-item
-                label="Tag Name"
-                required
-                >
+              <a-form-item
+              label="Tag Name"
+              required
+              >
 
-                <a-input
-                    v-model:value="formState.name"
-                    placeholder="Enter tag name"
-                    allow-clear
-                />
+              <a-input
+                  v-model:value="formState.name"
+                  placeholder="Enter tag name"
+                  allow-clear
+              />
 
-                </a-form-item>
+              </a-form-item>
 
-            </a-form>
+          </a-form>
 
-            </a-modal>
+          </a-modal>
 
-        </div>
-    </client-only>
+      </div>
+  </client-only>
 </template>

@@ -106,8 +106,8 @@ definePageMeta({
 })
 
 const form = reactive<LoginForm>({
-  email: 'superadmin@test.com',
-  password: 'superadmin1234',
+  email: '',
+  password: '',
 })
 
 const loading = ref(false)

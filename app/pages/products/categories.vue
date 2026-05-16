@@ -207,154 +207,156 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="space-y-6">
-    <div class="bg-white rounded-2xl">
-      <a-page-header title="Categories" sub-title="Manage product categories" class="rounded-2xl">
-        <template #breadcrumb>
-          <a-breadcrumb>
-            <a-breadcrumb-item>Dashboard</a-breadcrumb-item>
-            <a-breadcrumb-item>Categories</a-breadcrumb-item>
-          </a-breadcrumb>
-        </template>
+  <client-only>
+    <div class="space-y-6">
+      <div class="bg-white rounded-2xl">
+        <a-page-header title="Categories" sub-title="Manage product categories" class="rounded-2xl">
+          <template #breadcrumb>
+            <a-breadcrumb>
+              <a-breadcrumb-item>Dashboard</a-breadcrumb-item>
+              <a-breadcrumb-item>Categories</a-breadcrumb-item>
+            </a-breadcrumb>
+          </template>
 
-        <template #extra>
-          <a-button type="primary" class="flex items-center gap-2" @click="openCreateModal">
-            <Icon name="lucide:plus" />
-            Add Category
-          </a-button>
-        </template>
-      </a-page-header>
-    </div>
+          <template #extra>
+            <a-button type="primary" class="flex items-center gap-2" @click="openCreateModal">
+              <Icon name="lucide:plus" />
+              Add Category
+            </a-button>
+          </template>
+        </a-page-header>
+      </div>
 
-    <a-card class="rounded-2xl border-0 shadow-sm">
-      <div class="flex flex-col gap-5">
-        <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
-          <a-input v-model:value="search" placeholder="Search categories..." allow-clear class="flex-1">
-            <template #prefix>
-              <Icon name="lucide:search" />
-            </template>
-          </a-input>
+      <a-card class="rounded-2xl border-0 shadow-sm">
+        <div class="flex flex-col gap-5">
+          <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
+            <a-input v-model:value="search" placeholder="Search categories..." allow-clear class="flex-1">
+              <template #prefix>
+                <Icon name="lucide:search" />
+              </template>
+            </a-input>
 
-          <a-select v-model:value="deleted" placeholder="Status" allow-clear class="w-full lg:w-44">
-            <a-select-option value="false">Active</a-select-option>
-            <a-select-option value="true">Deleted</a-select-option>
-          </a-select>
+            <a-select v-model:value="deleted" placeholder="Status" allow-clear class="w-full lg:w-44">
+              <a-select-option value="false">Active</a-select-option>
+              <a-select-option value="true">Deleted</a-select-option>
+            </a-select>
 
-          <a-button class="flex-1 md:flex-none" @click="resetFilter">
-            Reset
-          </a-button>
+            <a-button class="flex-1 md:flex-none" @click="resetFilter">
+              Reset
+            </a-button>
 
-          <a-button type="primary" class="flex-1 md:flex-none" @click="applyFilter">
-            Apply
-          </a-button>
-        </div>
+            <a-button type="primary" class="flex-1 md:flex-none" @click="applyFilter">
+              Apply
+            </a-button>
+          </div>
 
-        <div class="flex justify-between items-center text-sm text-gray-500 border-t pt-4">
-          <div>
-            Showing
-            <span class="font-semibold text-black">
-              {{ categories.length }}
-            </span>
-            of
-            <span class="font-semibold text-black">
-              {{ total }}
-            </span>
-            categories
+          <div class="flex justify-between items-center text-sm text-gray-500 border-t pt-4">
+            <div>
+              Showing
+              <span class="font-semibold text-black">
+                {{ categories.length }}
+              </span>
+              of
+              <span class="font-semibold text-black">
+                {{ total }}
+              </span>
+              categories
+            </div>
           </div>
         </div>
-      </div>
 
-      <a-table
-        class="mt-5"
-        :columns="[
-          { title: 'Name', key: 'name' },
-          { title: 'Collection', key: 'collection' },
-          { title: 'Slug', key: 'slug' },
-          { title: 'Created', key: 'createdAt' },
-          { title: 'Action', key: 'action' }
-        ]"
-        :data-source="categories"
-        :loading="loading"
-        row-key="id"
-        :pagination="{
-          current: page,
-          pageSize: limit,
-          total,
-          showSizeChanger: true
-        }"
-        @change="handleTableChange"
+        <a-table
+          class="mt-5"
+          :columns="[
+            { title: 'Name', key: 'name' },
+            { title: 'Collection', key: 'collection' },
+            { title: 'Slug', key: 'slug' },
+            { title: 'Created', key: 'createdAt' },
+            { title: 'Action', key: 'action' }
+          ]"
+          :data-source="categories"
+          :loading="loading"
+          row-key="id"
+          :pagination="{
+            current: page,
+            pageSize: limit,
+            total,
+            showSizeChanger: true
+          }"
+          @change="handleTableChange"
+        >
+          <template #bodyCell="{ column, record }">
+            <template v-if="column.key === 'name'">
+              <span class="font-medium text-gray-900">
+                {{ record.name }}
+              </span>
+            </template>
+
+            <template v-else-if="column.key === 'collection'">
+              <span class="text-gray-500 text-sm">
+                {{
+                  collectionMap[
+                    record.collectionId
+                  ] || '-'
+                }}
+              </span>
+            </template>
+
+            <template v-else-if="column.key === 'slug'">
+              <span class="text-gray-500 text-sm">
+                {{ record.slug }}
+              </span>
+            </template>
+
+            <template v-else-if="column.key === 'createdAt'">
+              <span class="text-sm text-gray-500">
+                {{ new Date(record.createdAt).toLocaleString() }}
+              </span>
+            </template>
+
+            <template v-else-if="column.key === 'action'">
+              <div class="flex gap-2">
+                <a-button size="small" @click="openEditModal(record)">
+                  Edit
+                </a-button>
+
+                <a-button danger size="small" @click="handleDelete(record)">
+                  Delete
+                </a-button>
+              </div>
+            </template>
+          </template>
+        </a-table>
+      </a-card>
+
+      <a-modal
+        v-model:open="isModalOpen"
+        :title="isEditMode ? 'Edit Category' : 'Add Category'"
+        :confirm-loading="submitting"
+        @ok="handleSubmit"
+        @cancel="resetModal"
       >
-        <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'name'">
-            <span class="font-medium text-gray-900">
-              {{ record.name }}
-            </span>
-          </template>
+        <div class="pt-2">
+          <a-form layout="vertical">
+            <a-form-item label="Category Name" required>
+              <a-input
+                v-model:value="formState.name"
+                placeholder="Enter category name"
+                size="large"
+              />
+            </a-form-item>
 
-          <template v-else-if="column.key === 'collection'">
-            <span class="text-gray-500 text-sm">
-              {{
-                collectionMap[
-                  record.collectionId
-                ] || '-'
-              }}
-            </span>
-          </template>
-
-          <template v-else-if="column.key === 'slug'">
-            <span class="text-gray-500 text-sm">
-              {{ record.slug }}
-            </span>
-          </template>
-
-          <template v-else-if="column.key === 'createdAt'">
-            <span class="text-sm text-gray-500">
-              {{ new Date(record.createdAt).toLocaleString() }}
-            </span>
-          </template>
-
-          <template v-else-if="column.key === 'action'">
-            <div class="flex gap-2">
-              <a-button size="small" @click="openEditModal(record)">
-                Edit
-              </a-button>
-
-              <a-button danger size="small" @click="handleDelete(record)">
-                Delete
-              </a-button>
-            </div>
-          </template>
-        </template>
-      </a-table>
-    </a-card>
-
-    <a-modal
-      v-model:open="isModalOpen"
-      :title="isEditMode ? 'Edit Category' : 'Add Category'"
-      :confirm-loading="submitting"
-      @ok="handleSubmit"
-      @cancel="resetModal"
-    >
-      <div class="pt-2">
-        <a-form layout="vertical">
-          <a-form-item label="Category Name" required>
-            <a-input
-              v-model:value="formState.name"
-              placeholder="Enter category name"
-              size="large"
-            />
-          </a-form-item>
-
-          <a-form-item label="Collection" required>
-            <a-select
-              v-model:value="formState.collectionId"
-              :options="collectionOptions"
-              placeholder="Select collection"
-              size="large"
-            />
-          </a-form-item>
-        </a-form>
-      </div>
-    </a-modal>
-  </div>
+            <a-form-item label="Collection" required>
+              <a-select
+                v-model:value="formState.collectionId"
+                :options="collectionOptions"
+                placeholder="Select collection"
+                size="large"
+              />
+            </a-form-item>
+          </a-form>
+        </div>
+      </a-modal>
+    </div>
+  </client-only>
 </template>

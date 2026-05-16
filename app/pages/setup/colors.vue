@@ -164,224 +164,226 @@ onMounted(fetchColors)
 </script>
 
 <template>
-  <div class="space-y-6">
+  <client-only>
+    <div class="space-y-6">
 
-    <!-- HEADER -->
-    <div class="bg-white rounded-2xl">
+      <!-- HEADER -->
+      <div class="bg-white rounded-2xl">
 
-      <a-page-header
-        title="Color Settings"
-        sub-title="Manage product colors"
-      >
+        <a-page-header
+          title="Color Settings"
+          sub-title="Manage product colors"
+        >
 
-        <template #breadcrumb>
-          <a-breadcrumb>
-            <a-breadcrumb-item>Dashboard</a-breadcrumb-item>
-            <a-breadcrumb-item>Color Settings</a-breadcrumb-item>
-          </a-breadcrumb>
-        </template>
+          <template #breadcrumb>
+            <a-breadcrumb>
+              <a-breadcrumb-item>Dashboard</a-breadcrumb-item>
+              <a-breadcrumb-item>Color Settings</a-breadcrumb-item>
+            </a-breadcrumb>
+          </template>
 
-        <template #extra>
+          <template #extra>
 
-            <a-button type="primary" @click="openCreateModal">
-            Add Color
-          </a-button>
+              <a-button type="primary" @click="openCreateModal">
+              Add Color
+            </a-button>
 
-        </template>
+          </template>
 
-      </a-page-header>
-
-    </div>
-
-    <!-- TABLE -->
-    <a-card class="rounded-xl shadow-sm">
-
-      <div class="flex flex-col gap-5">
-
-        <!-- FILTER BAR -->
-        <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
-
-          <!-- SEARCH -->
-          <a-input
-            v-model:value="search"
-            placeholder="Search colors..."
-            allow-clear
-            class="flex-1"
-          >
-            <template #prefix>
-              <Icon name="lucide:search" />
-            </template>
-          </a-input>
-
-          <!-- SORT -->
-          <a-select
-            v-model:value="sort"
-            class="w-full lg:w-52"
-          >
-            <a-select-option value="-created_at">
-              Newest
-            </a-select-option>
-
-            <a-select-option value="created_at">
-              Oldest
-            </a-select-option>
-
-            <a-select-option value="name">
-              Name A-Z
-            </a-select-option>
-
-            <a-select-option value="-name">
-              Name Z-A
-            </a-select-option>
-          </a-select>
-
-          <!-- BUTTON -->
-          <a-button
-            class="flex-1 md:flex-none"
-            @click="resetFilter"
-          >
-            Reset
-          </a-button>
-
-          <a-button
-            type="primary"
-            class="flex-1 md:flex-none"
-            @click="applyFilter"
-          >
-            Apply
-          </a-button>
-
-        </div>
-
-        <!-- INFO ROW -->
-        <div class="flex justify-between items-center text-sm text-gray-500 border-t pt-4">
-
-          <div>
-            Showing
-
-            <span class="font-semibold text-black">
-              {{ colors.length }}
-            </span>
-
-            of
-
-            <span class="font-semibold text-black">
-              {{ total }}
-            </span>
-
-            colors
-          </div>
-
-        </div>
+        </a-page-header>
 
       </div>
 
-      <a-table
-        :columns="columns"
-        :data-source="colors"
-        :loading="loading"
-        row-key="id"
-        :pagination="{
-          current: page,
-          pageSize: limit,
-          total,
-          showSizeChanger: true,
-          onChange: handleTableChange,
-        }"
-      >
+      <!-- TABLE -->
+      <a-card class="rounded-xl shadow-sm">
 
-        <template #bodyCell="{ column, record }">
+        <div class="flex flex-col gap-5">
 
-          <!-- COLOR -->
-          <template v-if="column.key === 'color'">
-            <div class="flex items-center gap-3">
-              <div
-                class="w-8 h-8 rounded-lg border"
-                :style="{ backgroundColor: record.hexCode }"
-              />
+          <!-- FILTER BAR -->
+          <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
 
-              <div class="flex flex-col">
-                <span class="font-medium">{{ record.name }}</span>
-                <span class="text-xs text-gray-500 font-mono">
+            <!-- SEARCH -->
+            <a-input
+              v-model:value="search"
+              placeholder="Search colors..."
+              allow-clear
+              class="flex-1"
+            >
+              <template #prefix>
+                <Icon name="lucide:search" />
+              </template>
+            </a-input>
+
+            <!-- SORT -->
+            <a-select
+              v-model:value="sort"
+              class="w-full lg:w-52"
+            >
+              <a-select-option value="-created_at">
+                Newest
+              </a-select-option>
+
+              <a-select-option value="created_at">
+                Oldest
+              </a-select-option>
+
+              <a-select-option value="name">
+                Name A-Z
+              </a-select-option>
+
+              <a-select-option value="-name">
+                Name Z-A
+              </a-select-option>
+            </a-select>
+
+            <!-- BUTTON -->
+            <a-button
+              class="flex-1 md:flex-none"
+              @click="resetFilter"
+            >
+              Reset
+            </a-button>
+
+            <a-button
+              type="primary"
+              class="flex-1 md:flex-none"
+              @click="applyFilter"
+            >
+              Apply
+            </a-button>
+
+          </div>
+
+          <!-- INFO ROW -->
+          <div class="flex justify-between items-center text-sm text-gray-500 border-t pt-4">
+
+            <div>
+              Showing
+
+              <span class="font-semibold text-black">
+                {{ colors.length }}
+              </span>
+
+              of
+
+              <span class="font-semibold text-black">
+                {{ total }}
+              </span>
+
+              colors
+            </div>
+
+          </div>
+
+        </div>
+
+        <a-table
+          :columns="columns"
+          :data-source="colors"
+          :loading="loading"
+          row-key="id"
+          :pagination="{
+            current: page,
+            pageSize: limit,
+            total,
+            showSizeChanger: true,
+            onChange: handleTableChange,
+          }"
+        >
+
+          <template #bodyCell="{ column, record }">
+
+            <!-- COLOR -->
+            <template v-if="column.key === 'color'">
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-8 h-8 rounded-lg border"
+                  :style="{ backgroundColor: record.hexCode }"
+                />
+
+                <div class="flex flex-col">
+                  <span class="font-medium">{{ record.name }}</span>
+                  <span class="text-xs text-gray-500 font-mono">
+                    {{ record.hexCode }}
+                  </span>
+                </div>
+              </div>
+            </template>
+
+            <!-- HEX -->
+            <template v-else-if="column.key === 'hexCode'">
+              <div class="flex items-center gap-2">
+                <div
+                  class="w-4 h-4 rounded-full border"
+                  :style="{ backgroundColor: record.hexCode }"
+                />
+                <span class="font-mono text-sm">
                   {{ record.hexCode }}
                 </span>
               </div>
-            </div>
-          </template>
+            </template>
 
-          <!-- HEX -->
-          <template v-else-if="column.key === 'hexCode'">
-            <div class="flex items-center gap-2">
-              <div
-                class="w-4 h-4 rounded-full border"
-                :style="{ backgroundColor: record.hexCode }"
+            <!-- CREATED -->
+            <template v-else-if="column.key === 'createdAt'">
+              {{ new Date(record.createdAt).toLocaleString() }}
+            </template>
+
+            <!-- ACTION (SAFE CAST ONLY HERE) -->
+            <template v-else-if="column.key === 'action'">
+              <div class="flex gap-2">
+
+                <a-button
+                  size="small"
+                  @click="openEditModal(record as Color)"
+                >
+                  Edit
+                </a-button>
+
+                <a-button
+                  danger
+                  size="small"
+                  @click="handleDeleteColor(record as Color)"
+                >
+                  Delete
+                </a-button>
+
+              </div>
+            </template>
+
+          </template>
+        </a-table>
+      </a-card>
+
+      <!-- MODAL -->
+      <a-modal
+        v-model:open="isModalOpen"
+        :title="isEditMode ? 'Edit Color' : 'Add Color'"
+        :confirm-loading="submitting"
+        @cancel="resetModal"
+        @ok="handleSubmitColor"
+        class="mt-5"
+      >
+        <a-form layout="vertical">
+
+          <a-form-item label="Color Name" required>
+            <a-input v-model:value="formState.name" />
+          </a-form-item>
+
+          <a-form-item label="Hex Code" required>
+            <div class="flex gap-3 items-center">
+              <input
+                v-model="formState.hexCode"
+                type="color"
+                class="w-12 h-10 border rounded"
               />
-              <span class="font-mono text-sm">
-                {{ record.hexCode }}
-              </span>
+
+              <a-input v-model:value="formState.hexCode" />
             </div>
-          </template>
+          </a-form-item>
 
-          <!-- CREATED -->
-          <template v-else-if="column.key === 'createdAt'">
-            {{ new Date(record.createdAt).toLocaleString() }}
-          </template>
+        </a-form>
+      </a-modal>
 
-          <!-- ACTION (SAFE CAST ONLY HERE) -->
-          <template v-else-if="column.key === 'action'">
-            <div class="flex gap-2">
-
-              <a-button
-                size="small"
-                @click="openEditModal(record as Color)"
-              >
-                Edit
-              </a-button>
-
-              <a-button
-                danger
-                size="small"
-                @click="handleDeleteColor(record as Color)"
-              >
-                Delete
-              </a-button>
-
-            </div>
-          </template>
-
-        </template>
-      </a-table>
-    </a-card>
-
-    <!-- MODAL -->
-    <a-modal
-      v-model:open="isModalOpen"
-      :title="isEditMode ? 'Edit Color' : 'Add Color'"
-      :confirm-loading="submitting"
-      @cancel="resetModal"
-      @ok="handleSubmitColor"
-      class="mt-5"
-    >
-      <a-form layout="vertical">
-
-        <a-form-item label="Color Name" required>
-          <a-input v-model:value="formState.name" />
-        </a-form-item>
-
-        <a-form-item label="Hex Code" required>
-          <div class="flex gap-3 items-center">
-            <input
-              v-model="formState.hexCode"
-              type="color"
-              class="w-12 h-10 border rounded"
-            />
-
-            <a-input v-model:value="formState.hexCode" />
-          </div>
-        </a-form-item>
-
-      </a-form>
-    </a-modal>
-
-  </div>
+    </div>
+  </client-only>
 </template>

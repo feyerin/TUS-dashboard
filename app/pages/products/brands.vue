@@ -39,7 +39,7 @@ const fetchBrands = async () => {
     const res = await getBrands({
       page: page.value,
       limit: limit.value,
-      search: search.value || undefined,
+      name: search.value || undefined,
       deleted: deleted.value === 'true'
     })
 

@@ -199,214 +199,217 @@ onMounted(fetchSizes)
 </script>
 
 <template>
-  <div class="space-y-6">
+  <client-only>
+    <div class="space-y-6">
 
-    <!-- HEADER -->
-    <div class="bg-white rounded-2xl">
+      <!-- HEADER -->
+      <div class="bg-white rounded-2xl">
 
-      <a-page-header
-        title="Sizes Settings"
-        sub-title="Manage product sizes"
-      >
+        <a-page-header
+          title="Sizes Settings"
+          sub-title="Manage product sizes"
+        >
 
-        <template #breadcrumb>
-          <a-breadcrumb>
-            <a-breadcrumb-item>Dashboard</a-breadcrumb-item>
-            <a-breadcrumb-item>Color Settings</a-breadcrumb-item>
-          </a-breadcrumb>
-        </template>
+          <template #breadcrumb>
+            <a-breadcrumb>
+              <a-breadcrumb-item>Dashboard</a-breadcrumb-item>
+              <a-breadcrumb-item>Color Settings</a-breadcrumb-item>
+            </a-breadcrumb>
+          </template>
 
-        <template #extra>
+          <template #extra>
 
-            <a-button type="primary" @click="openCreateModal">
-            Add Sizes
-          </a-button>
+              <a-button type="primary" @click="openCreateModal">
+              Add Sizes
+            </a-button>
 
-        </template>
+          </template>
 
-      </a-page-header>
+        </a-page-header>
 
-    </div>
+      </div>
 
-    <!-- TABLE -->
-    <a-card class="rounded-xl shadow-sm">
+      <!-- TABLE -->
+      <a-card class="rounded-xl shadow-sm">
 
-      <!-- FILTER -->
-      <div class="flex flex-col gap-5">
+        <!-- FILTER -->
+        <div class="flex flex-col gap-5">
 
-        <!-- FILTER BAR -->
-        <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
+          <!-- FILTER BAR -->
+          <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
 
-          <!-- SEARCH -->
-          <a-input
-            v-model:value="search"
-            placeholder="Search size..."
-            allow-clear
-            class="flex-1"
-          >
-            <template #prefix>
-              <Icon name="lucide:search" />
-            </template>
-          </a-input>
+            <!-- SEARCH -->
+            <a-input
+              v-model:value="search"
+              placeholder="Search size..."
+              allow-clear
+              class="flex-1"
+            >
+              <template #prefix>
+                <Icon name="lucide:search" />
+              </template>
+            </a-input>
 
-          <!-- SORT -->
-          <a-select
-            v-model:value="sort"
-            class="w-full lg:w-52"
-          >
+            <!-- SORT -->
+            <a-select
+              v-model:value="sort"
+              class="w-full lg:w-52"
+            >
 
-            <a-select-option value="-created_at">
-              Newest
-            </a-select-option>
+              <a-select-option value="-created_at">
+                Newest
+              </a-select-option>
 
-            <a-select-option value="created_at">
-              Oldest
-            </a-select-option>
+              <a-select-option value="created_at">
+                Oldest
+              </a-select-option>
 
-            <a-select-option value="name">
-              Name A-Z
-            </a-select-option>
+              <a-select-option value="name">
+                Name A-Z
+              </a-select-option>
 
-            <a-select-option value="-name">
-              Name Z-A
-            </a-select-option>
+              <a-select-option value="-name">
+                Name Z-A
+              </a-select-option>
 
-          </a-select>
+            </a-select>
 
-          <!-- BUTTON -->
-          <a-button
-            class="flex-1 md:flex-none"
-            @click="resetFilter"
-          >
-            Reset
-          </a-button>
+            <!-- BUTTON -->
+            <a-button
+              class="flex-1 md:flex-none"
+              @click="resetFilter"
+            >
+              Reset
+            </a-button>
 
-          <a-button
-            type="primary"
-            class="flex-1 md:flex-none"
-            @click="applyFilter"
-          >
-            Apply
-          </a-button>
+            <a-button
+              type="primary"
+              class="flex-1 md:flex-none"
+              @click="applyFilter"
+            >
+              Apply
+            </a-button>
 
-        </div>
+          </div>
 
-        <!-- INFO ROW -->
-        <div class="flex justify-between items-center text-sm text-gray-500 border-t pt-4">
+          <!-- INFO ROW -->
+          <div class="flex justify-between items-center text-sm text-gray-500 border-t pt-4">
 
-          <div>
-            Showing
+            <div>
+              Showing
 
-            <span class="font-semibold text-black">
-              {{ sizes.length }}
-            </span>
+              <span class="font-semibold text-black">
+                {{ sizes.length }}
+              </span>
 
-            of
+              of
 
-            <span class="font-semibold text-black">
-              {{ total }}
-            </span>
+              <span class="font-semibold text-black">
+                {{ total }}
+              </span>
 
-            sizes
+              sizes
+            </div>
+
           </div>
 
         </div>
 
-      </div>
-
-      <a-table
-        :columns="columns"
-        :data-source="sizes"
-        :loading="loading"
-        row-key="id"
-        :pagination="{
-          current: page,
-          pageSize: limit,
-          total: total,
-          showSizeChanger: true,
-          onChange: handleTableChange
-        }"
-        class="mt-5"
-      >
-
-        <template #bodyCell="{ column, record }">
-
-          <!-- NAME -->
-          <template v-if="column.key === 'name'">
-
-            <div class="font-medium text-gray-800">
-              {{ record.name }}
-            </div>
-
-          </template>
-
-          <!-- CREATED -->
-          <template v-else-if="column.key === 'createdAt'">
-
-            <div>
-              {{ new Date(record.createdAt).toLocaleString() }}
-            </div>
-
-          </template>
-
-          <!-- ACTION -->
-          <template v-else-if="column.key === 'action'">
-
-            <div class="flex gap-2">
-
-              <a-button
-                size="small"
-                @click="openEditModal(record)"
-              >
-                Edit
-              </a-button>
-
-              <a-button
-                danger
-                size="small"
-                @click="handleDeleteSize(record)"
-              >
-                Delete
-              </a-button>
-
-            </div>
-
-          </template>
-
-        </template>
-
-      </a-table>
-
-    </a-card>
-
-    <!-- MODAL -->
-    <a-modal
-      v-model:open="isModalOpen"
-      :title="isEditMode ? 'Edit Size' : 'Add Size'"
-      :ok-text="isEditMode ? 'Update' : 'Create'"
-      :confirm-loading="submitting"
-      @cancel="resetModal"
-      @ok="handleSubmitSize"
-    >
-
-      <a-form layout="vertical">
-
-        <a-form-item
-          label="Size Name"
-          required
+        <a-table
+          :columns="columns"
+          :data-source="sizes"
+          :loading="loading"
+          row-key="id"
+          :pagination="{
+            current: page,
+            pageSize: limit,
+            total: total,
+            showSizeChanger: true,
+            onChange: handleTableChange
+          }"
+          class="mt-5"
         >
 
-          <a-input
-            v-model:value="formState.name"
-            placeholder="Enter size name"
-            allow-clear
-          />
+          <template #bodyCell="{ column, record }">
 
-        </a-form-item>
+            <!-- NAME -->
+            <template v-if="column.key === 'name'">
 
-      </a-form>
+              <div class="font-medium text-gray-800">
+                {{ record.name }}
+              </div>
 
-    </a-modal>
+            </template>
 
-  </div>
+            <!-- CREATED -->
+            <template v-else-if="column.key === 'createdAt'">
+
+              <div>
+                {{ new Date(record.createdAt).toLocaleString() }}
+              </div>
+
+            </template>
+
+            <!-- ACTION -->
+            <template v-else-if="column.key === 'action'">
+
+              <div class="flex gap-2">
+
+                <a-button
+                  size="small"
+                  @click="openEditModal(record)"
+                >
+                  Edit
+                </a-button>
+
+                <a-button
+                  danger
+                  size="small"
+                  @click="handleDeleteSize(record)"
+                >
+                  Delete
+                </a-button>
+
+              </div>
+
+            </template>
+
+          </template>
+
+        </a-table>
+
+      </a-card>
+
+      <!-- MODAL -->
+      <a-modal
+        v-model:open="isModalOpen"
+        :title="isEditMode ? 'Edit Size' : 'Add Size'"
+        :ok-text="isEditMode ? 'Update' : 'Create'"
+        :confirm-loading="submitting"
+        @cancel="resetModal"
+        @ok="handleSubmitSize"
+      >
+
+        <a-form layout="vertical">
+
+          <a-form-item
+            label="Size Name"
+            required
+          >
+
+            <a-input
+              v-model:value="formState.name"
+              placeholder="Enter size name"
+              allow-clear
+            />
+
+          </a-form-item>
+
+        </a-form>
+
+      </a-modal>
+
+    </div>
+  </client-only>
+
 </template>

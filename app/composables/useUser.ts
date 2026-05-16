@@ -67,7 +67,7 @@ export const useUser = () => {
         }
       )
 
-      return res.data?.data || {}
+      return res.data?.users || {}
 
     } catch (err) {
 

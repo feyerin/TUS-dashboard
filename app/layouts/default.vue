@@ -19,7 +19,7 @@ onMounted(async () => {
     <div class="flex flex-col flex-1 overflow-hidden">
       <LayoutsTopbar />
 
-      <main class="px-6 pb-6 overflow-y-auto">
+      <main class="px-4 pb-6 overflow-y-auto">
         <slot />
       </main>
     </div>

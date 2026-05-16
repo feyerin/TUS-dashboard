@@ -47,7 +47,6 @@ const fetchUsers = async () => {
       page: page.value,
       limit: limit.value,
       orderBy: sort.value,
-      search: search.value
     })
 
     users.value = res.users || []
@@ -269,368 +268,370 @@ onMounted(fetchUsers)
 </script>
 
 <template>
-  <div class="space-y-6">
+  <client-only>
+    <div class="space-y-6">
 
-    <!-- HEADER -->
-    <div class="bg-white rounded-2xl">
+      <!-- HEADER -->
+      <div class="bg-white rounded-2xl">
 
-      <a-page-header
-        title="User Settings"
-        sub-title="Manage dashboard users"
-      >
+        <a-page-header
+          title="User Settings"
+          sub-title="Manage dashboard users"
+        >
 
-        <template #breadcrumb>
-          <a-breadcrumb>
-            <a-breadcrumb-item>
-              Dashboard
-            </a-breadcrumb-item>
+          <template #breadcrumb>
+            <a-breadcrumb>
+              <a-breadcrumb-item>
+                Dashboard
+              </a-breadcrumb-item>
 
-            <a-breadcrumb-item>
-              Users
-            </a-breadcrumb-item>
-          </a-breadcrumb>
-        </template>
+              <a-breadcrumb-item>
+                Users
+              </a-breadcrumb-item>
+            </a-breadcrumb>
+          </template>
 
-        <template #extra>
+          <template #extra>
 
-          <a-button
-            type="primary"
-            @click="openCreateModal"
-          >
-            Add User
-          </a-button>
+            <a-button
+              type="primary"
+              @click="openCreateModal"
+            >
+              Add User
+            </a-button>
 
-        </template>
+          </template>
 
-      </a-page-header>
-
-    </div>
-
-    <!-- TABLE -->
-    <a-card class="rounded-xl shadow-sm">
-
-      <!-- FILTER -->
-      <div class="flex flex-col gap-5">
-
-        <!-- FILTER BAR -->
-        <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
-
-          <!-- SEARCH -->
-          <a-input
-            v-model:value="search"
-            placeholder="Search user..."
-            allow-clear
-            class="flex-1"
-          >
-            <template #prefix>
-              <Icon name="lucide:search" />
-            </template>
-          </a-input>
-
-          <!-- SORT -->
-          <a-select
-            v-model:value="sort"
-            class="w-full lg:w-52"
-          >
-
-            <a-select-option value="-created_at">
-              Newest
-            </a-select-option>
-
-            <a-select-option value="created_at">
-              Oldest
-            </a-select-option>
-
-            <a-select-option value="name">
-              Name A-Z
-            </a-select-option>
-
-            <a-select-option value="-name">
-              Name Z-A
-            </a-select-option>
-
-          </a-select>
-
-          <!-- BUTTON -->
-          <a-button
-            class="flex-1 md:flex-none"
-            @click="resetFilter"
-          >
-            Reset
-          </a-button>
-
-          <a-button
-            type="primary"
-            class="flex-1 md:flex-none"
-            @click="applyFilter"
-          >
-            Apply
-          </a-button>
-
-        </div>
-
-        <!-- INFO -->
-        <div class="flex justify-between items-center text-sm text-gray-500 border-t pt-4">
-
-          <div>
-            Showing
-
-            <span class="font-semibold text-black">
-              {{ users.length }}
-            </span>
-
-            of
-
-            <span class="font-semibold text-black">
-              {{ total }}
-            </span>
-
-            users
-          </div>
-
-        </div>
+        </a-page-header>
 
       </div>
 
       <!-- TABLE -->
-      <a-table
-        :columns="columns"
-        :data-source="users"
-        :loading="loading"
-        row-key="id"
-        :pagination="{
-          current: page,
-          pageSize: limit,
-          total: total,
-          showSizeChanger: true,
-          onChange: handleTableChange
-        }"
-        class="mt-5"
+      <a-card class="rounded-xl shadow-sm">
+
+        <!-- FILTER -->
+        <div class="flex flex-col gap-5">
+
+          <!-- FILTER BAR -->
+          <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
+
+            <!-- SEARCH -->
+            <a-input
+              v-model:value="search"
+              placeholder="Search user..."
+              allow-clear
+              class="flex-1"
+            >
+              <template #prefix>
+                <Icon name="lucide:search" />
+              </template>
+            </a-input>
+
+            <!-- SORT -->
+            <a-select
+              v-model:value="sort"
+              class="w-full lg:w-52"
+            >
+
+              <a-select-option value="-created_at">
+                Newest
+              </a-select-option>
+
+              <a-select-option value="created_at">
+                Oldest
+              </a-select-option>
+
+              <a-select-option value="name">
+                Name A-Z
+              </a-select-option>
+
+              <a-select-option value="-name">
+                Name Z-A
+              </a-select-option>
+
+            </a-select>
+
+            <!-- BUTTON -->
+            <a-button
+              class="flex-1 md:flex-none"
+              @click="resetFilter"
+            >
+              Reset
+            </a-button>
+
+            <a-button
+              type="primary"
+              class="flex-1 md:flex-none"
+              @click="applyFilter"
+            >
+              Apply
+            </a-button>
+
+          </div>
+
+          <!-- INFO -->
+          <div class="flex justify-between items-center text-sm text-gray-500 border-t pt-4">
+
+            <div>
+              Showing
+
+              <span class="font-semibold text-black">
+                {{ users.length }}
+              </span>
+
+              of
+
+              <span class="font-semibold text-black">
+                {{ total }}
+              </span>
+
+              users
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- TABLE -->
+        <a-table
+          :columns="columns"
+          :data-source="users"
+          :loading="loading"
+          row-key="id"
+          :pagination="{
+            current: page,
+            pageSize: limit,
+            total: total,
+            showSizeChanger: true,
+            onChange: handleTableChange
+          }"
+          class="mt-5"
+        >
+
+          <template #bodyCell="{ column, record }">
+
+            <!-- NAME -->
+            <template
+              v-if="column.key === 'name'"
+            >
+
+              <div class="font-medium text-gray-800">
+                {{ record.name }}
+              </div>
+
+            </template>
+
+            <!-- EMAIL -->
+            <template
+              v-else-if="column.key === 'email'"
+            >
+
+              <div>
+                {{ record.email }}
+              </div>
+
+            </template>
+
+            <!-- ROLE -->
+            <template
+              v-else-if="column.key === 'role'"
+            >
+
+              <a-tag color="blue">
+                {{ record.role }}
+              </a-tag>
+
+            </template>
+
+            <!-- STATUS -->
+            <template
+              v-else-if="column.key === 'status'"
+            >
+
+              <a-tag
+                :color="
+                  record.status === 'active'
+                    ? 'green'
+                    : 'red'
+                "
+              >
+                {{ record.status }}
+              </a-tag>
+
+            </template>
+
+            <!-- CREATED -->
+            <template
+              v-else-if="column.key === 'createdAt'"
+            >
+
+              <div>
+                {{
+                  new Date(
+                    record.createdAt
+                  ).toLocaleString()
+                }}
+              </div>
+
+            </template>
+
+            <!-- ACTION -->
+            <template
+              v-else-if="column.key === 'action'"
+            >
+
+              <div class="flex gap-2">
+
+                <a-button
+                  size="small"
+                  @click="
+                    openEditModal(record)
+                  "
+                >
+                  Edit
+                </a-button>
+
+                <a-button
+                  danger
+                  size="small"
+                  @click="
+                    handleDeleteUser(record)
+                  "
+                >
+                  Delete
+                </a-button>
+
+              </div>
+
+            </template>
+
+          </template>
+
+        </a-table>
+
+      </a-card>
+
+      <!-- MODAL -->
+      <a-modal
+        v-model:open="isModalOpen"
+        :title="
+          isEditMode
+            ? 'Edit User'
+            : 'Add User'
+        "
+        :ok-text="
+          isEditMode
+            ? 'Update'
+            : 'Create'
+        "
+        :confirm-loading="submitting"
+        @cancel="resetModal"
+        @ok="handleSubmitUser"
       >
 
-        <template #bodyCell="{ column, record }">
+        <a-form layout="vertical">
 
           <!-- NAME -->
-          <template
-            v-if="column.key === 'name'"
+          <a-form-item
+            label="Name"
+            required
           >
 
-            <div class="font-medium text-gray-800">
-              {{ record.name }}
-            </div>
+            <a-input
+              v-model:value="
+                formState.name
+              "
+              placeholder="Enter name"
+            />
 
-          </template>
+          </a-form-item>
 
           <!-- EMAIL -->
-          <template
-            v-else-if="column.key === 'email'"
+          <a-form-item
+            label="Email"
+            required
           >
 
-            <div>
-              {{ record.email }}
-            </div>
+            <a-input
+              v-model:value="
+                formState.email
+              "
+              placeholder="Enter email"
+            />
 
-          </template>
+          </a-form-item>
+
+          <!-- PASSWORD -->
+          <a-form-item
+            :label="
+              isEditMode
+                ? 'Password (optional)'
+                : 'Password'
+            "
+            :required="!isEditMode"
+          >
+
+            <a-input-password
+              v-model:value="
+                formState.password
+              "
+              placeholder="Enter password"
+            />
+
+          </a-form-item>
 
           <!-- ROLE -->
-          <template
-            v-else-if="column.key === 'role'"
+          <a-form-item
+            label="Role"
+            required
           >
 
-            <a-tag color="blue">
-              {{ record.role }}
-            </a-tag>
-
-          </template>
-
-          <!-- STATUS -->
-          <template
-            v-else-if="column.key === 'status'"
-          >
-
-            <a-tag
-              :color="
-                record.status === 'active'
-                  ? 'green'
-                  : 'red'
+            <a-select
+              v-model:value="
+                formState.role
               "
             >
-              {{ record.status }}
-            </a-tag>
 
-          </template>
+              <a-select-option value="admin">
+                Admin
+              </a-select-option>
 
-          <!-- CREATED -->
-          <template
-            v-else-if="column.key === 'createdAt'"
+              <a-select-option value="staff">
+                Staff
+              </a-select-option>
+
+            </a-select>
+
+          </a-form-item>
+
+          <!-- STATUS -->
+          <a-form-item
+            label="Status"
+            required
           >
 
-            <div>
-              {{
-                new Date(
-                  record.createdAt
-                ).toLocaleString()
-              }}
-            </div>
+            <a-select
+              v-model:value="
+                formState.status
+              "
+            >
 
-          </template>
+              <a-select-option value="active">
+                Active
+              </a-select-option>
 
-          <!-- ACTION -->
-          <template
-            v-else-if="column.key === 'action'"
-          >
+              <a-select-option value="inactive">
+                Inactive
+              </a-select-option>
 
-            <div class="flex gap-2">
+            </a-select>
 
-              <a-button
-                size="small"
-                @click="
-                  openEditModal(record)
-                "
-              >
-                Edit
-              </a-button>
+          </a-form-item>
 
-              <a-button
-                danger
-                size="small"
-                @click="
-                  handleDeleteUser(record)
-                "
-              >
-                Delete
-              </a-button>
+        </a-form>
 
-            </div>
+      </a-modal>
 
-          </template>
-
-        </template>
-
-      </a-table>
-
-    </a-card>
-
-    <!-- MODAL -->
-    <a-modal
-      v-model:open="isModalOpen"
-      :title="
-        isEditMode
-          ? 'Edit User'
-          : 'Add User'
-      "
-      :ok-text="
-        isEditMode
-          ? 'Update'
-          : 'Create'
-      "
-      :confirm-loading="submitting"
-      @cancel="resetModal"
-      @ok="handleSubmitUser"
-    >
-
-      <a-form layout="vertical">
-
-        <!-- NAME -->
-        <a-form-item
-          label="Name"
-          required
-        >
-
-          <a-input
-            v-model:value="
-              formState.name
-            "
-            placeholder="Enter name"
-          />
-
-        </a-form-item>
-
-        <!-- EMAIL -->
-        <a-form-item
-          label="Email"
-          required
-        >
-
-          <a-input
-            v-model:value="
-              formState.email
-            "
-            placeholder="Enter email"
-          />
-
-        </a-form-item>
-
-        <!-- PASSWORD -->
-        <a-form-item
-          :label="
-            isEditMode
-              ? 'Password (optional)'
-              : 'Password'
-          "
-          :required="!isEditMode"
-        >
-
-          <a-input-password
-            v-model:value="
-              formState.password
-            "
-            placeholder="Enter password"
-          />
-
-        </a-form-item>
-
-        <!-- ROLE -->
-        <a-form-item
-          label="Role"
-          required
-        >
-
-          <a-select
-            v-model:value="
-              formState.role
-            "
-          >
-
-            <a-select-option value="admin">
-              Admin
-            </a-select-option>
-
-            <a-select-option value="staff">
-              Staff
-            </a-select-option>
-
-          </a-select>
-
-        </a-form-item>
-
-        <!-- STATUS -->
-        <a-form-item
-          label="Status"
-          required
-        >
-
-          <a-select
-            v-model:value="
-              formState.status
-            "
-          >
-
-            <a-select-option value="active">
-              Active
-            </a-select-option>
-
-            <a-select-option value="inactive">
-              Inactive
-            </a-select-option>
-
-          </a-select>
-
-        </a-form-item>
-
-      </a-form>
-
-    </a-modal>
-
-  </div>
+    </div>
+  </client-only>
 </template>

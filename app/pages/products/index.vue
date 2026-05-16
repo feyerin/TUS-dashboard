@@ -171,11 +171,11 @@ onMounted(fetchProducts)
     <div class="space-y-6">
 
       <!-- HEADER -->
-      <div class="bg-white rounded-2xl">
+      <div class="shadow-sm bg-white rounded-2xl">
         <a-page-header
           title="Products"
           sub-title="Manage your product inventory and details"
-          class="bg-white rounded-2xl"
+          class="rounded-2xl"
         >
           <template #breadcrumb>
             <a-breadcrumb>
@@ -203,7 +203,7 @@ onMounted(fetchProducts)
       </div>
 
       <!-- FILTER -->
-      <a-card class="rounded-2xl border-0 shadow-sm">
+      <a-card class="rounded-3xl border-0 shadow-sm">
 
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
@@ -392,14 +392,6 @@ onMounted(fetchProducts)
               <a-select-option value="created_at">
                 Oldest
               </a-select-option>
-
-              <a-select-option value="basePrice">
-                Price ↑
-              </a-select-option>
-
-              <a-select-option value="-basePrice">
-                Price ↓
-              </a-select-option>
             </a-select>
           </div>
 
@@ -464,7 +456,7 @@ onMounted(fetchProducts)
 
             <img
               :src="product.imageUrl"
-              class="w-full h-64 object-cover rounded-xl transition duration-500 group-hover:scale-[1.03]"
+              class="w-full h-full object-cover rounded-xl transition duration-500 group-hover:scale-[1.03]"
             />
 
             <!-- STATUS -->

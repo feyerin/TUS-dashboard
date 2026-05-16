@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import { reactive, ref, computed, watch } from 'vue'
+import {
+  reactive,
+  ref,
+  computed,
+  watch
+} from 'vue'
+
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
 const collapsed = ref(false)
 const mobileOpen = ref(false)
+
+const hoveredMenu = ref('')
 
 const sidebarMenu = [
   {
@@ -20,10 +28,22 @@ const sidebarMenu = [
     icon: 'lucide:box',
     type: 'group',
     children: [
-      { label: 'All Products', to: '/products' },
-      { label: 'Collections', to: '/products/collections' },
-      { label: 'Categories', to: '/products/categories' },
-      { label: 'Brands', to: '/products/Brands' }
+      {
+        label: 'All Products',
+        to: '/products'
+      },
+      {
+        label: 'Collections',
+        to: '/products/collections'
+      },
+      {
+        label: 'Categories',
+        to: '/products/categories'
+      },
+      {
+        label: 'Brands',
+        to: '/products/brands'
+      }
     ]
   },
 
@@ -32,9 +52,18 @@ const sidebarMenu = [
     icon: 'lucide:settings-2',
     type: 'group',
     children: [
-      { label: 'Sizes', to: '/setup/sizes' },
-      { label: 'Colors', to: '/setup/colors' },
-      { label: 'Tags', to: '/setup/tags' },
+      {
+        label: 'Sizes',
+        to: '/setup/sizes'
+      },
+      {
+        label: 'Colors',
+        to: '/setup/colors'
+      },
+      {
+        label: 'Tags',
+        to: '/setup/tags'
+      }
     ]
   },
 
@@ -43,7 +72,10 @@ const sidebarMenu = [
     icon: 'lucide:users',
     type: 'group',
     children: [
-      { label: 'Customer List', to: '/customers' },
+      {
+        label: 'Customer List',
+        to: '/customers'
+      }
     ]
   },
 
@@ -52,18 +84,31 @@ const sidebarMenu = [
     icon: 'lucide:settings',
     type: 'group',
     children: [
-      { label: 'Homepage', to: '/settings/homepage' },
-      { label: 'General', to: '/settings/general' },
-      { label: 'Users', to: '/settings/users' },
+      {
+        label: 'Homepage',
+        to: '/settings/homepage'
+      },
+      {
+        label: 'General',
+        to: '/settings/general'
+      },
+      {
+        label: 'Users',
+        to: '/settings/users'
+      }
     ]
   }
 ]
 
 const menu = sidebarMenu
 
-const currentPath = computed(() => route.path)
+const currentPath = computed(
+  () => route.path
+)
 
-const open = reactive<Record<string, boolean>>({})
+const open = reactive<
+  Record<string, boolean>
+>({})
 
 const toggle = (key: string) => {
   open[key] = !open[key]
@@ -73,8 +118,12 @@ const isActive = (path?: string) => {
   return currentPath.value === path
 }
 
-const isParentActive = (children?: any[]) => {
-  return children?.some((c) => c.to === currentPath.value)
+const isParentActive = (
+  children?: any[]
+) => {
+  return children?.some(
+    c => c.to === currentPath.value
+  )
 }
 
 /**
@@ -85,9 +134,11 @@ watch(
   () => {
     menu.forEach((item: any) => {
       if (item.children) {
-        open[item.label] = item.children.some(
-          (c: any) => c.to === currentPath.value
-        )
+        open[item.label] =
+          item.children.some(
+            (c: any) =>
+              c.to === currentPath.value
+          )
       }
     })
 
@@ -100,23 +151,29 @@ watch(
 <template>
   <aside
     :class="[
-      'fixed md:relative inset-y-0 left-0 z-50 bg-white border-r border-gray-100 shadow-xl transition-all duration-300 flex flex-col m-4 rounded-lg',
+      'fixed md:relative inset-y-0 left-0 z-50 bg-white border-r border-gray-100 shadow-xl transition-all duration-300 flex flex-col m-4 rounded-3xl',
       collapsed ? 'w-20' : 'w-72',
-      mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+      mobileOpen
+        ? 'translate-x-0'
+        : '-translate-x-full md:translate-x-0'
     ]"
   >
     <!-- HEADER -->
     <div
       class="h-16 px-4 border-b flex items-center"
-      :class="collapsed ? 'justify-center' : 'justify-between'"
+      :class="
+        collapsed
+          ? 'justify-center'
+          : 'justify-between'
+      "
     >
       <Transition name="fade">
-        <h1
+        <span
           v-if="!collapsed"
-          class="text-lg font-bold tracking-tight whitespace-nowrap"
+          class="text-2xl font-bold tracking-tight whitespace-nowrap"
         >
           Dashboard
-        </h1>
+      </span>
       </Transition>
 
       <button
@@ -126,13 +183,17 @@ watch(
         <Icon
           name="lucide:panel-left-close"
           class="text-xl transition-transform duration-300"
-          :class="collapsed && 'rotate-180'"
+          :class="
+            collapsed && 'rotate-180'
+          "
         />
       </button>
     </div>
 
     <!-- NAVIGATION -->
-    <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-2">
+    <nav
+      class="flex-1 overflow-visible px-3 py-4 space-y-2"
+    >
       <template
         v-for="item in menu"
         :key="item.label"
@@ -143,8 +204,10 @@ watch(
           :to="item.to"
           class="nav-item"
           :class="[
-            isActive(item.to) && 'active',
-            collapsed && 'justify-center px-0'
+            isActive(item.to) &&
+              'active',
+            collapsed &&
+              'justify-center px-0'
           ]"
         >
           <Icon
@@ -152,19 +215,34 @@ watch(
             class="text-[20px] shrink-0"
           />
 
-          <span v-if="!collapsed" class="truncate">
+          <span
+            v-if="!collapsed"
+            class="truncate"
+          >
             {{ item.label }}
           </span>
         </NuxtLink>
 
         <!-- GROUP -->
-        <div v-else>
+        <div
+          v-else
+          class="relative"
+          @mouseenter="
+            hoveredMenu = item.label
+          "
+          @mouseleave="
+            hoveredMenu = ''
+          "
+        >
           <button
             @click="toggle(item.label)"
             class="nav-item w-full"
             :class="[
-              isParentActive(item.children) && 'active',
-              collapsed && 'justify-center px-0'
+              isParentActive(
+                item.children
+              ) && 'active',
+              collapsed &&
+                'justify-center px-0'
             ]"
           >
             <Icon
@@ -172,23 +250,33 @@ watch(
               class="text-[20px] shrink-0"
             />
 
-            <template v-if="!collapsed">
-              <span class="flex-1 text-left truncate">
+            <template
+              v-if="!collapsed"
+            >
+              <span
+                class="flex-1 text-left truncate"
+              >
                 {{ item.label }}
               </span>
 
               <Icon
                 name="lucide:chevron-down"
                 class="transition-transform duration-300"
-                :class="open[item.label] && 'rotate-180'"
+                :class="
+                  open[item.label] &&
+                  'rotate-180'
+                "
               />
             </template>
           </button>
 
-          <!-- CHILDREN -->
+          <!-- NORMAL SUBMENU -->
           <Transition name="slide">
             <div
-              v-show="open[item.label] && !collapsed"
+              v-show="
+                open[item.label] &&
+                !collapsed
+              "
               class="ml-5 mt-2 border-l border-gray-200 pl-4 space-y-1"
             >
               <NuxtLink
@@ -196,7 +284,43 @@ watch(
                 :key="child.to"
                 :to="child.to"
                 class="sub-item"
-                :class="isActive(child.to) && 'sub-active'"
+                :class="
+                  isActive(
+                    child.to
+                  ) && 'sub-active'
+                "
+              >
+                {{ child.label }}
+              </NuxtLink>
+            </div>
+          </Transition>
+
+          <!-- FLOATING TOOLTIP MENU -->
+          <Transition name="fade">
+            <div
+              v-if="
+                collapsed &&
+                hoveredMenu ===
+                  item.label
+              "
+              class="absolute left-[72px] top-0 z-50 w-56 rounded-2xl border border-gray-200 bg-white shadow-2xl p-2"
+            >
+              <div
+                class="px-3 py-2 text-xs font-semibold text-gray-400 uppercase"
+              >
+                {{ item.label }}
+              </div>
+
+              <NuxtLink
+                v-for="child in item.children"
+                :key="child.to"
+                :to="child.to"
+                class="tooltip-item"
+                :class="
+                  isActive(
+                    child.to
+                  ) && 'sub-active'
+                "
               >
                 {{ child.label }}
               </NuxtLink>
@@ -222,7 +346,11 @@ watch(
     class="md:hidden fixed bottom-5 right-5 z-[60] h-14 w-14 rounded-full bg-black text-white shadow-xl flex items-center justify-center"
   >
     <Icon
-      :name="mobileOpen ? 'lucide:x' : 'lucide:menu'"
+      :name="
+        mobileOpen
+          ? 'lucide:x'
+          : 'lucide:menu'
+      "
       class="text-2xl"
     />
   </button>
@@ -243,6 +371,15 @@ watch(
 }
 
 .sub-item:hover {
+  @apply bg-sky-50 text-sky-600;
+}
+
+.tooltip-item {
+  @apply flex items-center px-3 py-2 rounded-xl
+  text-sm text-gray-700 transition-all;
+}
+
+.tooltip-item:hover {
   @apply bg-sky-50 text-sky-600;
 }
 

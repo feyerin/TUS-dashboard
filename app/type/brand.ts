@@ -1,7 +1,7 @@
 export interface BrandsQuery {
   page?: number
   limit?: number
-  search?: string
+  name?: string
   deleted?: boolean
 }
 
