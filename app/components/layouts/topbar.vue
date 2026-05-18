@@ -39,7 +39,7 @@
           class="flex items-center gap-2 cursor-pointer hover:bg-gray-100 px-2 py-1 rounded-md transition"
         >
           <div class="w-8 h-8 rounded-full bg-gray-300 overflow-hidden">
-            <img src="https://i.pravatar.cc/100" alt="avatar" />
+            <img src="/img/user.png" alt="avatar" />
           </div>
 
           <!-- HIDE TEXT ON SMALL SCREEN -->

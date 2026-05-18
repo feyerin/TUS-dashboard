@@ -1,101 +1,200 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { message } from 'ant-design-vue'
+import type {ApiResponse, SocialMediaPayload, ContactPayload } from '~/type/contact'
 
 useHead({
   title: 'General Settings • Dashboard'
 })
 
-// ================= TYPES =================
-interface GeneralSettings {
-  email: string
-  phone: string
-  address: string
-  officeHours: string
-  instagram: string
-  facebook: string
-  tiktok: string
-}
+const {
+  getContact,
+  updateContact,
+
+  getSocialMedia,
+  updateSocialMedia
+} = useSetting()
 
 // ================= STATE =================
-const form = ref<GeneralSettings>({
+const loadingContact = ref(false)
+const loadingSocial = ref(false)
+
+// ================= FORM =================
+const contactForm = ref<ContactPayload>({
   email: '',
-  phone: '',
-  address: '',
-  officeHours: '',
-  instagram: '',
-  facebook: '',
-  tiktok: '',
+  hours: '',
+  phone_number: '',
+  store: ''
 })
 
-// ================= SAVE =================
-const handleSave = () => {
-  message.success('General settings saved!')
+const socialForm = ref<SocialMediaPayload>({
+  instagram: '',
+  facebook: '',
+  tiktok: ''
+})
+
+// ================= FETCH CONTACT =================
+const fetchContact = async () => {
+  try {
+    loadingContact.value = true
+
+    const response = await getContact()
+
+    contactForm.value = response
+  }
+  catch (error) {
+    message.error('Failed to fetch contact settings')
+  }
+  finally {
+    loadingContact.value = false
+  }
 }
+
+// ================= FETCH SOCIAL =================
+const fetchSocialMedia = async () => {
+  try {
+    loadingSocial.value = true
+
+    const response = await getSocialMedia()
+
+    socialForm.value = response
+  }
+  catch (error) {
+    message.error('Failed to fetch social media settings')
+  }
+  finally {
+    loadingSocial.value = false
+  }
+}
+
+// ================= SAVE CONTACT =================
+const saveContact = async () => {
+  try {
+    loadingContact.value = true
+
+    await updateContact(contactForm.value)
+
+    message.success('Contact settings saved!')
+  }
+  catch (error) {
+    message.error('Failed to save contact settings')
+  }
+  finally {
+    loadingContact.value = false
+  }
+}
+
+// ================= SAVE SOCIAL =================
+const saveSocialMedia = async () => {
+  try {
+    loadingSocial.value = true
+
+    await updateSocialMedia(socialForm.value)
+
+    message.success('Social media settings saved!')
+  }
+  catch (error) {
+    message.error('Failed to save social media settings')
+  }
+  finally {
+    loadingSocial.value = false
+  }
+}
+
+// ================= INIT =================
+onMounted(() => {
+  fetchContact()
+  fetchSocialMedia()
+
+  console.log(contactForm)
+
+})
 </script>
 
 <template>
   <client-only>
     <div class="max-w-7xl mx-auto space-y-6">
 
-      <!-- ================= CONTACT INFO ================= -->
-      <a-card title="Contact Information" :bordered="false" class="shadow-sm">
+      <!-- ================= CONTACT ================= -->
+      <a-card
+        title="Contact Information"
+        :bordered="false"
+        class="shadow-sm"
+        :loading="loadingContact"
+      >
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
           <a-input
-            v-model:value="form.email"
+            v-model:value="contactForm.email"
             placeholder="Email"
           />
 
           <a-input
-            v-model:value="form.phone"
+            v-model:value="contactForm.phone_number"
             placeholder="Phone Number"
           />
 
           <a-textarea
-            v-model:value="form.address"
-            placeholder="Address"
+            v-model:value="contactForm.store"
+            placeholder="Store / Address"
             :rows="3"
             class="md:col-span-2"
           />
 
           <a-input
-            v-model:value="form.officeHours"
-            placeholder="Office Hours (e.g. Mon - Fri, 09:00 - 18:00)"
+            v-model:value="contactForm.hours"
+            placeholder="Office Hours"
             class="md:col-span-2"
           />
 
         </div>
+
+        <div class="flex justify-end mt-6">
+          <a-button
+            type="primary"
+            :loading="loadingContact"
+            @click="saveContact"
+          >
+            Save Contact
+          </a-button>
+        </div>
       </a-card>
 
       <!-- ================= SOCIAL MEDIA ================= -->
-      <a-card title="Social Media" :bordered="false" class="shadow-sm">
+      <a-card
+        title="Social Media"
+        :bordered="false"
+        class="shadow-sm"
+        :loading="loadingSocial"
+      >
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
           <a-input
-            v-model:value="form.instagram"
+            v-model:value="socialForm.instagram"
             placeholder="Instagram URL"
           />
 
           <a-input
-            v-model:value="form.facebook"
+            v-model:value="socialForm.facebook"
             placeholder="Facebook URL"
           />
 
           <a-input
-            v-model:value="form.tiktok"
+            v-model:value="socialForm.tiktok"
             placeholder="TikTok URL"
           />
 
         </div>
-      </a-card>
 
-      <!-- ================= SAVE ================= -->
-      <div class="flex justify-end">
-        <a-button type="primary" size="large" @click="handleSave">
-          Save Settings
-        </a-button>
-      </div>
+        <div class="flex justify-end mt-6">
+          <a-button
+            type="primary"
+            :loading="loadingSocial"
+            @click="saveSocialMedia"
+          >
+            Save Social Media
+          </a-button>
+        </div>
+      </a-card>
 
     </div>
   </client-only>

@@ -15,6 +15,10 @@ export default defineNuxtConfig({
     '@sidebase/nuxt-auth'
   ],
 
+  image: {
+    domains: ['i.ibb.co']
+  },
+
   runtimeConfig: {
     public: {
       apiBase:
