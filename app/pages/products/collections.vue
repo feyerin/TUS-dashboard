@@ -52,8 +52,6 @@ const fetchCollections = async () => {
         deleted: deleted.value === 'true'
       }) as CollectionResponse
 
-    console.log(res.data)
-
     collections.value =
       res.data.collections ?? []
 

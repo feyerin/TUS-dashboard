@@ -93,23 +93,29 @@ watch(
       discountValue: value.discountValue || 0
     }
 
-    console.log(value)
-
     variant.value = {
       sizes: value.sizes || [],
       colors: value.colors || []
     }
 
-    links.value =
-      value.links?.length
-        ? value.links
-        : [
-            {
-              label: '',
-              linkType: '',
-              url: ''
-            }
-          ]
+   links.value =
+    value.links?.length
+      ? value.links.map((item: {
+          label?: string
+          linkType?: string
+          url?: string
+        }) => ({
+          label: item.label ?? '',
+          linkType: item.linkType ?? '',
+          url: item.url ?? ''
+        }))
+      : [
+          {
+            label: '',
+            linkType: '',
+            url: ''
+          }
+        ]
 
     thumbnailList.value =
       value.imageUrl
@@ -677,7 +683,7 @@ const submit = () => {
               </div>
 
               <!-- ADD -->
-              <a-button
+              <!-- <a-button
                 block
                 class="rounded-md"
                 @click="
@@ -689,7 +695,7 @@ const submit = () => {
                 "
               >
                 + Add Marketplace Link
-              </a-button>
+              </a-button> -->
 
             </div>
 
@@ -759,7 +765,6 @@ const submit = () => {
               <!-- DISCOUNT VALUE -->
               <a-form-item
                 label="Discount Value"
-                required
               >
 
                 <a-input-number
@@ -936,9 +941,6 @@ const submit = () => {
                 class="text-sm font-medium mb-2"
               >
                 Tags
-                <span
-                  class="text-red-500"
-                >*</span>
               </p>
 
               <!-- TAGS SECTION -->

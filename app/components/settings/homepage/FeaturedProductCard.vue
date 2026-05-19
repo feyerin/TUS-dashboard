@@ -68,10 +68,7 @@ const fetchProducts = async () => {
       res.data?.products || []
   } catch (error) {
     console.error(error)
-
-    message.error(
-      'Gagal mengambil product'
-    )
+    message.error('Gagal mengambil product')
   } finally {
     productLoading.value = false
   }
@@ -87,16 +84,11 @@ const fetchSection = async () => {
       res.data?.content || []
   } catch (error) {
     console.error(error)
-
-    message.error(
-      'Gagal mengambil featured product'
-    )
+    message.error('Gagal mengambil featured product')
   }
 }
 
-const handleDelete = (
-  id: string
-) => {
+const handleDelete = (id: string) => {
   Modal.confirm({
     title: 'Delete Product',
     content:
@@ -109,9 +101,7 @@ const handleDelete = (
           item => item.id !== id
         )
 
-      message.success(
-        'Product removed'
-      )
+      message.success('Product removed')
     }
   })
 }
@@ -129,22 +119,16 @@ const handleSave = async () => {
       success: boolean
     }
 
-    if (res.success) {
-      message.success(
-        'Featured product berhasil disimpan'
-      )
-    } else {
-      message.error(
-        'Gagal menyimpan featured product'
-      )
-    }
+    message.success(
+      'Featured product berhasil disimpan'
+    )
+
   } catch (error) {
     console.error(error)
-
     message.error(
-      'Terjadi kesalahan'
+      'Gagal menyimpan featured product'
     )
-  } finally {
+   } finally {
     loading.value = false
   }
 }
@@ -161,7 +145,7 @@ onMounted(() => {
     :bordered="false"
     class="shadow-sm rounded-xl"
   >
-    <div class="space-y-4">
+    <div class="space-y-5">
       <div class="flex justify-end">
         <a-button @click="open = true">
           Pilih Product
@@ -175,55 +159,69 @@ onMounted(() => {
         :pagination="false"
         :loading="productLoading"
       >
-        <template
-          #bodyCell="{ column, record }"
-        >
+        <template #bodyCell="{ column, record }">
           <template
             v-if="
-              column.dataIndex ===
-              'imageUrl'
+              column.dataIndex === 'imageUrl'
             "
           >
             <img
               :src="
-                (
-                  record as Product
-                ).imageUrl
+                (record as Product).imageUrl
               "
               class="w-14 h-14 object-cover rounded-lg border"
             >
           </template>
 
           <template
-            v-if="
-              column.dataIndex ===
-              'basePrice'
+            v-else-if="
+              column.dataIndex === 'name'
             "
           >
-            Rp
-            {{
-              Number(
-                (
-                  record as Product
-                ).basePrice
-              ).toLocaleString(
-                'id-ID'
-              )
-            }}
+            <div class="flex flex-col">
+              <span class="font-medium">
+                {{
+                  (record as Product).name
+                }}
+              </span>
+
+              <span
+                class="text-xs text-gray-500"
+              >
+                {{
+                  (record as Product).slug
+                }}
+              </span>
+            </div>
           </template>
 
           <template
-            v-if="
-              column.dataIndex ===
-              'status'
+            v-else-if="
+              column.dataIndex === 'basePrice'
+            "
+          >
+            <span class="font-medium">
+              Rp
+              {{
+                Number(
+                  (
+                    record as Product
+                  ).basePrice
+                ).toLocaleString('id-ID')
+              }}
+            </span>
+          </template>
+
+          <template
+            v-else-if="
+              column.dataIndex === 'status'
             "
           >
             <a-tag
               :color="
                 (
                   record as Product
-                ).status ===
-                'published'
+                ).status === 'published'
                   ? 'green'
                   : 'orange'
               "
@@ -237,9 +235,8 @@ onMounted(() => {
           </template>
 
           <template
-            v-if="
-              column.dataIndex ===
-              'action'
+            v-else-if="
+              column.dataIndex === 'action'
             "
           >
             <a-button
@@ -274,9 +271,7 @@ onMounted(() => {
       v-model:open="open"
       :products="products"
       :selected="selected"
-      @change="
-        selected = $event
-      "
+      @change="selected = $event"
     />
   </a-card>
 </template>

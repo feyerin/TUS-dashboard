@@ -68,7 +68,9 @@ const fetchCategories = async () => {
     })
 
     categories.value = res?.categories ?? []
-    total.value = res?.pagination?.totalItems ?? 0
+    total.value = res?.total ?? 0
+    console.log(res)
+
   } catch (err: any) {
     message.error(err?.message || 'Failed fetch categories')
   } finally {
@@ -76,6 +78,7 @@ const fetchCategories = async () => {
     isFetching = false
   }
 }
+
 
 // ================= WATCH =================
 watch(search, () => {

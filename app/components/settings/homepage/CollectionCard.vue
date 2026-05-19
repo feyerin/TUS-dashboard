@@ -1,12 +1,6 @@
 <script setup lang="ts">
-import {
-  ref,
-  watch,
-  onMounted
-} from 'vue'
-
+import { ref, watch, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
-
 import type { UploadFile } from 'ant-design-vue'
 
 type UploadResponse = {
@@ -37,21 +31,13 @@ const { uploadImage } = useUpload()
 
 const loading = ref(false)
 
-const fileList = ref<
-  UploadFile[]
->([])
+const fileList = ref<UploadFile[]>([])
 
 const form = ref({
-  file: undefined as
-    | UploadFile
-    | undefined,
-
+  file: undefined as UploadFile | undefined,
   subtitle: '',
-
   title: '',
-
   buttonText: '',
-
   buttonLink: ''
 })
 
@@ -61,27 +47,21 @@ watch(fileList, files => {
 
 const fetchSection = async () => {
   try {
-    const res =
-      (await getSection(
-        DYNAMIC_SECTION_KEY.COLLECTION_SECTION
-      )) as SectionResponse
+    const res = (await getSection(
+      DYNAMIC_SECTION_KEY.COLLECTION_SECTION
+    )) as SectionResponse
 
-    const content =
-      res.data?.content
+    const content = res.data?.content
 
     if (!content) return
 
-    form.value.subtitle =
-      content.subtitle || ''
-
-    form.value.title =
-      content.title || ''
-
-    form.value.buttonText =
-      content.buttonText || ''
-
-    form.value.buttonLink =
-      content.buttonLink || ''
+    form.value = {
+      ...form.value,
+      subtitle: content.subtitle || '',
+      title: content.title || '',
+      buttonText: content.buttonText || '',
+      buttonLink: content.buttonLink || ''
+    }
 
     if (content.image) {
       fileList.value = [
@@ -95,16 +75,13 @@ const fetchSection = async () => {
     }
   } catch (error) {
     console.error(error)
-
     message.error(
       'Gagal mengambil data collection section'
     )
   }
 }
 
-const beforeUpload = (
-  file: File
-) => {
+const beforeUpload = (file: File) => {
   const allowedTypes = [
     'image/jpeg',
     'image/png',
@@ -112,10 +89,9 @@ const beforeUpload = (
     'image/jpg'
   ]
 
-  const isImage =
-    allowedTypes.includes(
-      file.type
-    )
+  const isImage = allowedTypes.includes(
+    file.type
+  )
 
   if (!isImage) {
     message.error(
@@ -147,77 +123,49 @@ const handleSave = async () => {
 
     if (
       form.value.file?.url &&
-      !form.value.file
-        ?.originFileObj
+      !form.value.file?.originFileObj
     ) {
-      imageUrl =
-        form.value.file.url
+      imageUrl = form.value.file.url
     }
 
-    if (
-      form.value.file
-        ?.originFileObj
-    ) {
-      const response =
-        (await uploadImage(
-          form.value.file
-            .originFileObj as File
-        )) as UploadResponse
+    if (form.value.file?.originFileObj) {
+      const response = (await uploadImage(
+        form.value.file
+          .originFileObj as File
+      )) as UploadResponse
 
-      imageUrl =
-        response.data.url
+      imageUrl = response.data.url
     }
 
-    const res =
-      (await updateSection(
-        DYNAMIC_SECTION_KEY.COLLECTION_SECTION,
-        {
-          content: {
-            image: imageUrl,
-
-            subtitle:
-              form.value
-                .subtitle,
-
-            title:
-              form.value.title,
-
-            buttonText:
-              form.value
-                .buttonText,
-
-            buttonLink:
-              form.value
-                .buttonLink
-          }
+    const res = (await updateSection(
+      DYNAMIC_SECTION_KEY.COLLECTION_SECTION,
+      {
+        content: {
+          image: imageUrl,
+          subtitle: form.value.subtitle,
+          title: form.value.title,
+          buttonText: form.value.buttonText,
+          buttonLink: form.value.buttonLink
         }
-      )) as {
-        success: boolean
       }
-
-    if (res.success) {
-      message.success(
-        'Collection section berhasil disimpan'
-      )
-    } else {
-      message.error(
-        'Gagal menyimpan collection section'
-      )
+    )) as {
+      success: boolean
     }
+
+    message.success(
+      'Collection section berhasil disimpan'
+    )
   } catch (error) {
     console.error(error)
-
     message.error(
-      'Terjadi kesalahan'
-    )
+        'Gagal menyimpan collection section'
+      )
   } finally {
     loading.value = false
   }
 }
 
-onMounted(() => {
-  fetchSection()
-})
+onMounted(fetchSection)
 </script>
 
 <template>
@@ -226,56 +174,40 @@ onMounted(() => {
     :bordered="false"
     class="shadow-sm rounded-xl"
   >
-    <div class="space-y-4">
+    <div class="space-y-5">
       <div>
-        <p class="text-sm text-gray-500 mb-2">
+        <p class="text-sm text-gray-500 mb-3">
           Upload gambar collection
         </p>
 
         <a-upload
-          v-model:file-list="
-            fileList
-          "
+          v-model:file-list="fileList"
           list-type="picture-card"
           :max-count="1"
-          :before-upload="
-            beforeUpload
-          "
+          :before-upload="beforeUpload"
         >
-          <div>
-            Upload
-          </div>
+          <div>Upload</div>
         </a-upload>
       </div>
 
-      <div
-        class="grid grid-cols-1 md:grid-cols-2 gap-4"
-      >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <a-input
-          v-model:value="
-            form.subtitle
-          "
+          v-model:value="form.subtitle"
           placeholder="Subtitle"
         />
 
         <a-input
-          v-model:value="
-            form.title
-          "
+          v-model:value="form.title"
           placeholder="Title"
         />
 
         <a-input
-          v-model:value="
-            form.buttonText
-          "
+          v-model:value="form.buttonText"
           placeholder="Button Text"
         />
 
         <a-input
-          v-model:value="
-            form.buttonLink
-          "
+          v-model:value="form.buttonLink"
           placeholder="Button Link"
         />
       </div>

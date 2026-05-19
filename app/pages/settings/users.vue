@@ -57,6 +57,9 @@ const fetchUsers = async () => {
     total.value =
       res.pagination?.totalItems || 0
 
+
+      console.log(res)
+
   } catch (err: any) {
 
     message.error(

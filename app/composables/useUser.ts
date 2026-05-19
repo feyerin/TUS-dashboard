@@ -60,14 +60,14 @@ export const useUser = () => {
     try {
 
       const res = await axios.get(
-        `${config.public.apiBase}${USER_URL}`,
+        `${config.public.apiBase}${USER_URL}?role=admin`,
         {
           headers: headers(),
           params
         }
       )
 
-      return res.data?.users || {}
+      return res.data?.data || []
 
     } catch (err) {
 

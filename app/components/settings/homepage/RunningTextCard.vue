@@ -48,18 +48,9 @@ const handleSave = async () => {
       }
     ) as { success: boolean }
 
-    if (res.success) {
-      message.success(
-        'Running text berhasil disimpan'
-      )
-    } else {
-      message.error(
-        'Gagal menyimpan running text'
-      )
-    }
+    message.success('Running text berhasil disimpan')
   } catch (error) {
-    console.error(error)
-    message.error('Terjadi kesalahan')
+    message.error('Gagal menyimpan running text')
   } finally {
     loading.value = false
   }

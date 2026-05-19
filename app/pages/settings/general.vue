@@ -104,9 +104,6 @@ const saveSocialMedia = async () => {
 onMounted(() => {
   fetchContact()
   fetchSocialMedia()
-
-  console.log(contactForm)
-
 })
 </script>
 
@@ -142,7 +139,7 @@ onMounted(() => {
 
           <a-input
             v-model:value="contactForm.hours"
-            placeholder="Office Hours"
+            placeholder="Office Hours, contoh (07:00 WIB - 19:00 WIB)"
             class="md:col-span-2"
           />
 

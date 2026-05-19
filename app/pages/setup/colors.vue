@@ -50,7 +50,8 @@ const fetchColors = async () => {
     const response = res as ApiResponse<{ colors: Color[]; pagination: any }>
 
     colors.value = response.data?.colors ?? []
-    total.value = response.data?.pagination?.totalItems ?? 0
+    total.value = response?.pagination?.totalItems ?? 0
+    console.log(response)
   } catch (err: any) {
     message.error(err?.response?.data?.message || 'Failed fetch colors')
   } finally {

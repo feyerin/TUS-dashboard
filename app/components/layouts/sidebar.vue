@@ -22,7 +22,6 @@ const sidebarMenu = [
     to: '/',
     type: 'item'
   },
-
   {
     label: 'Products',
     icon: 'lucide:box',
@@ -46,7 +45,6 @@ const sidebarMenu = [
       }
     ]
   },
-
   {
     label: 'Product Setup',
     icon: 'lucide:settings-2',
@@ -59,14 +57,15 @@ const sidebarMenu = [
       {
         label: 'Colors',
         to: '/setup/colors'
-      },
-      {
-        label: 'Tags',
-        to: '/setup/tags'
       }
     ]
   },
-
+    {
+    label: 'Sale Product',
+    icon: 'lucide:percent',
+    type: 'item',
+    to: '/sales',
+  },
   {
     label: 'Customers',
     icon: 'lucide:users',
@@ -78,7 +77,6 @@ const sidebarMenu = [
       }
     ]
   },
-
   {
     label: 'Settings',
     icon: 'lucide:settings',

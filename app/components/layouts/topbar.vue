@@ -70,7 +70,8 @@
 const emit = defineEmits(['toggle-sidebar'])
 
 const handleLogout = () => {
-  localStorage.removeItem('token')
+  localStorage.removeItem('access_token')
+  localStorage.removeItem('refresh_token')
   navigateTo('/login')
 }
 </script>
