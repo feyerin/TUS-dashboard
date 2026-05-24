@@ -10,6 +10,7 @@ const config = useRuntimeConfig()
 
 const { formatPrice, formatDate } = useFormatter()
 const { getProducts } = useProductApi()
+const { fetchAll } = useMasterData()
 
 // ================= MASTER DATA =================
 const {
@@ -164,6 +165,10 @@ const deleteProduct = (record: any) => {
 
 // ================= INIT =================
 onMounted(fetchProducts)
+
+onMounted(async () => {
+  await fetchAll()
+})
 </script>
 
 <template>

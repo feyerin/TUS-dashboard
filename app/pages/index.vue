@@ -88,7 +88,7 @@ const fetchProducts = async () => {
     total.value = res?.pagination?.totalItems ?? 0
 
   } catch (err: any) {
-    message.error(err?.message || 'Failed fetch products')
+    console.log(err?.message || 'Failed fetch products')
   } finally {
     loading.value = false
   }

@@ -3,7 +3,6 @@ import { ref, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 
 const route = useRoute()
-const { fetchAll } = useMasterData()
 
 useHead({
   title: 'Edit product • Dashboard'
@@ -95,10 +94,6 @@ const handleUpdate = async (
     )
   }
 }
-
-onMounted(async () => {
-  await fetchAll()
-})
 
 onMounted(fetchDetail)
 </script>

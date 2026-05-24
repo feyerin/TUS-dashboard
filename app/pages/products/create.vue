@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const { fetchAll } = useMasterData()
 
 useHead({
   title: 'Create product • Dashboard'
@@ -29,10 +28,6 @@ const handleCreate = async (
     )
   }
 }
-
-onMounted(async () => {
-  await fetchAll()
-})
 </script>
 
 <template>
