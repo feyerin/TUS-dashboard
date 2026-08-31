@@ -46,6 +46,7 @@ const form = ref({
   seoTag: [] as string[],
   basePrice: undefined,
   discountType: '',
+  hidePrice: false,
   discountValue: undefined
 })
 
@@ -90,7 +91,8 @@ watch(
       seoTag: value.seoTag || [],
       basePrice: value.basePrice || 0,
       discountType: value.discountType || '',
-      discountValue: value.discountValue || 0
+      discountValue: value.discountValue || 0,
+      hidePrice: value.hidePrice || false
     }
 
     variant.value = {
@@ -325,6 +327,7 @@ const submit = () => {
     discountValue: Number(
       form.value.discountValue || 0
     ),
+    hidePrice: form.value.hidePrice,
     imageUrl:
       thumbnailList.value?.[0]
         ?.response?.url ||
@@ -774,6 +777,13 @@ const submit = () => {
                   class="w-full rounded-md"
                 />
 
+              </a-form-item>
+
+                <!-- HIDE PRICE -->
+              <a-form-item>
+                <a-checkbox v-model:checked="form.hidePrice">
+                  Hide Price
+                </a-checkbox>
               </a-form-item>
 
             </a-form>
