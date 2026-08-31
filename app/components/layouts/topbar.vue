@@ -28,10 +28,10 @@
     <div class="flex items-center gap-3 md:gap-4">
 
       <!-- NOTIFICATION -->
-      <button class="p-2 rounded-xl hover:bg-gray-100 transition relative">
+      <!-- <button class="p-2 rounded-xl hover:bg-gray-100 transition relative">
         <Icon name="lucide:bell" class="text-lg" />
         <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-      </button>
+      </button> -->
 
       <!-- USER -->
       <a-dropdown placement="bottomRight">

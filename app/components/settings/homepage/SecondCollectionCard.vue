@@ -75,7 +75,7 @@ const fetchSection = async () => {
     }
   } catch (error) {
     console.error(error)
-    message.error('Gagal mengambil data collection section')
+    message.error('Gagal mengambil data second collection section')
   }
 }
 
@@ -123,7 +123,7 @@ const handleSave = async () => {
     }
 
     const res = (await updateSection(
-      DYNAMIC_SECTION_KEY.COLLECTION_SECTION,
+      DYNAMIC_SECTION_KEY.COLLECTION_SECTION_2,
       {
         content: {
           image: imageUrl,
