@@ -66,17 +66,17 @@ const sidebarMenu = [
     type: 'item',
     to: '/sales',
   },
-  {
-    label: 'Customers',
-    icon: 'lucide:users',
-    type: 'group',
-    children: [
-      {
-        label: 'Customer List',
-        to: '/customers'
-      }
-    ]
-  },
+  // {
+  //   label: 'Customers',
+  //   icon: 'lucide:users',
+  //   type: 'group',
+  //   children: [
+  //     {
+  //       label: 'Customer List',
+  //       to: '/customers'
+  //     }
+  //   ]
+  // },
   {
     label: 'Settings',
     icon: 'lucide:settings',

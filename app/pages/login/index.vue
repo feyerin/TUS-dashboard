@@ -68,7 +68,7 @@
           </a-form-item>
 
           <!-- Extra -->
-          <div class="flex justify-between items-center text-sm">
+          <!-- <div class="flex justify-between items-center text-sm">
             <label class="flex items-center gap-2 text-gray-500 cursor-pointer">
               <input type="checkbox" class="rounded" />
               Remember me
@@ -77,7 +77,7 @@
             <a class="text-blue-500 hover:underline cursor-pointer">
               Lupa password?
             </a>
-          </div>
+          </div> -->
         </a-form>
       </a-card>
 
@@ -103,6 +103,10 @@ const config = useRuntimeConfig()
 
 definePageMeta({
   layout: 'auth'
+})
+
+useHead({
+  title: 'Login • The Underwear Supply'
 })
 
 const form = reactive<LoginForm>({
