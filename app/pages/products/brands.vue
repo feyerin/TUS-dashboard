@@ -167,8 +167,8 @@ const handleDelete = (record: BrandItem) => {
         message.success('Deleted')
 
         fetchBrands()
-      } catch {
-        message.error('Delete failed')
+      } catch (err: any) {
+        message.error(err?.data.error.message || 'Delete failed')
       }
     }
   })

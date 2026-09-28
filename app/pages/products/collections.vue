@@ -157,8 +157,8 @@ const handleDelete = (record: any) => {
         await deleteCollection(record.id)
         message.success('Deleted')
         fetchCollections()
-      } catch {
-        message.error('Delete failed')
+      } catch (err: any) {
+        message.error(err?.data.error.message || 'Delete failed')
       }
     }
   })

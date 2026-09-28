@@ -51,7 +51,6 @@ const fetchColors = async () => {
 
     colors.value = response.data?.colors ?? []
     total.value = response?.pagination?.totalItems ?? 0
-    console.log(response)
   } catch (err: any) {
     message.error(err?.response?.data?.message || 'Failed fetch colors')
   } finally {

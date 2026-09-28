@@ -215,7 +215,10 @@ onMounted(fetchProducts)
           <!-- RIGHT -->
           <div class="grid grid-cols-2 gap-4 w-full max-w-md">
 
-            <div class="rounded-3xl border border-white/10 bg-white/10 backdrop-blur-xl p-5">
+            <div
+              class="rounded-3xl border border-white/10 bg-white/10 backdrop-blur-xl p-5 cursor-pointer transition hover:bg-white/15 hover:-translate-y-1"
+              @click="navigateTo('/products')"
+            >
               <div class="flex items-center justify-between">
                 <span class="text-slate-300 text-sm">
                   Products
@@ -231,7 +234,10 @@ onMounted(fetchProducts)
               </div>
             </div>
 
-            <div class="rounded-3xl border border-white/10 bg-white/10 backdrop-blur-xl p-5">
+            <div
+              class="rounded-3xl border border-white/10 bg-white/10 backdrop-blur-xl p-5 cursor-pointer transition hover:bg-white/15 hover:-translate-y-1"
+              @click="navigateTo('/products/categories')"
+            >
               <div class="flex items-center justify-between">
                 <span class="text-slate-300 text-sm">
                   Categories
@@ -247,7 +253,10 @@ onMounted(fetchProducts)
               </div>
             </div>
 
-            <div class="rounded-3xl border border-white/10 bg-white/10 backdrop-blur-xl p-5">
+            <div
+              class="rounded-3xl border border-white/10 bg-white/10 backdrop-blur-xl p-5 cursor-pointer transition hover:bg-white/15 hover:-translate-y-1"
+              @click="navigateTo('/products/brands')"
+            >
               <div class="flex items-center justify-between">
                 <span class="text-slate-300 text-sm">
                   Brands
@@ -263,7 +272,9 @@ onMounted(fetchProducts)
               </div>
             </div>
 
-            <div class="rounded-3xl border border-white/10 bg-white/10 backdrop-blur-xl p-5">
+            <div
+              class="rounded-3xl border border-white/10 bg-white/10 backdrop-blur-xl p-5"
+            >
               <div class="flex items-center justify-between">
                 <span class="text-slate-300 text-sm">
                   Published

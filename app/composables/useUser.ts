@@ -52,15 +52,20 @@ export const useUser = () => {
 
   // ================= GET USERS =================
   const getUsers = async (
-    params?: any
+    params?: {
+      page?: number
+      limit?: number
+      orderBy?: string
+      name?: string
+      role?: string
+    }
   ) => {
     loading.value = true
     error.value = null
 
     try {
-
       const res = await axios.get(
-        `${config.public.apiBase}${USER_URL}?role=admin`,
+        `${config.public.apiBase}${USER_URL}`,
         {
           headers: headers(),
           params
@@ -70,10 +75,8 @@ export const useUser = () => {
       return res.data?.data || []
 
     } catch (err) {
-
       error.value = err
       throw err
-
     } finally {
       loading.value = false
     }

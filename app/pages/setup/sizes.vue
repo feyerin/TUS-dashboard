@@ -160,7 +160,7 @@ const handleDeleteSize = (record: any) => {
     async onOk() {
       try {
 
-        await deleteSize(record.id)
+        await deleteSize(record.name)
 
         message.success('Size deleted')
 

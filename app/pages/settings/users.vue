@@ -30,8 +30,8 @@ const formState = ref({
   name: '',
   email: '',
   password: '',
-  role: 'admin',
-  status: 'active'
+  role: '',
+  isActive: 'true'
 })
 
 // ================= FILTER =================
@@ -51,15 +51,14 @@ const fetchUsers = async () => {
       page: page.value,
       limit: limit.value,
       orderBy: sort.value,
+      role: 'admin',
+      ...(search.value && {
+        name: search.value
+      })
     })
 
     users.value = res.users || []
-    total.value =
-      res.pagination?.totalItems || 0
-
-
-      console.log(res)
-
+    total.value = res.pagination?.totalItems || 0
   } catch (err: any) {
 
     message.error(
@@ -104,7 +103,7 @@ const resetModal = () => {
     email: '',
     password: '',
     role: 'admin',
-    status: 'active'
+    isActive: 'true'
   }
 }
 
@@ -122,7 +121,7 @@ const openEditModal = (record: any) => {
     email: record.email,
     password: '',
     role: record.role,
-    status: record.status
+    isActive: record.isActive ? 'true' : 'false'
   }
 
   isModalOpen.value = true
@@ -161,7 +160,7 @@ const handleSubmitUser = async () => {
       name: formState.value.name,
       email: formState.value.email,
       role: formState.value.role,
-      status: formState.value.status
+      isActive: formState.value.isActive === 'true'
     }
 
     if (formState.value.password) {
@@ -256,10 +255,10 @@ const columns = [
     title: 'Role',
     key: 'role'
   },
-  {
-    title: 'Status',
-    key: 'status'
-  },
+  // {
+  //   title: 'Status',
+  //   key: 'status'
+  // },
   {
     title: 'Created At',
     key: 'createdAt'
@@ -451,21 +450,22 @@ onMounted(fetchUsers)
             </template>
 
             <!-- STATUS -->
-            <template
+            <!-- <template
               v-else-if="column.key === 'status'"
             >
 
+
               <a-tag
                 :color="
-                  record.status === 'active'
+                  record.isActive === 'true'
                     ? 'green'
                     : 'red'
                 "
               >
-                {{ record.status }}
+                {{ record.isActive }}
               </a-tag>
 
-            </template>
+            </template> -->
 
             <!-- CREATED -->
             <template
@@ -588,7 +588,7 @@ onMounted(fetchUsers)
           </a-form-item>
 
           <!-- ROLE -->
-          <a-form-item
+          <!-- <a-form-item
             label="Role"
             required
           >
@@ -609,31 +609,25 @@ onMounted(fetchUsers)
 
             </a-select>
 
-          </a-form-item>
+          </a-form-item> -->
 
           <!-- STATUS -->
-          <a-form-item
+          <!-- <a-form-item
             label="Status"
             required
           >
 
-            <a-select
-              v-model:value="
-                formState.status
-              "
-            >
+<a-select v-model:value="formState.isActive">
+  <a-select-option value="true">
+    Active
+  </a-select-option>
 
-              <a-select-option value="active">
-                Active
-              </a-select-option>
+  <a-select-option value="false">
+    Inactive
+  </a-select-option>
+</a-select>
 
-              <a-select-option value="inactive">
-                Inactive
-              </a-select-option>
-
-            </a-select>
-
-          </a-form-item>
+          </a-form-item> -->
 
         </a-form>
 

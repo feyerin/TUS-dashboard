@@ -201,7 +201,7 @@ const handleDelete = (record: any) => {
         message.success('Category deleted')
         fetchCategories()
       } catch (err: any) {
-        message.error(err?.message || 'Delete failed')
+        message.error(err?.data.error.message || 'Delete failed')
       }
     }
   })
