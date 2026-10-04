@@ -1,38 +1,33 @@
-import type {
-  BrandsQuery,
-  BrandResponse
-} from '~/type/brand'
+import type { BrandsQuery, BrandResponse } from '~/type/brand'
 
 export const useBrand = () => {
   const { $api } = useNuxtApp()
+  const { brands: masterBrands } = useMasterData()
 
-  const getBrands = async (
-    params?: BrandsQuery
-  ) => {
-    return await $api<BrandResponse>(
-      '/api/v1/private/brand',
-      {
-        method: 'GET',
-        query: params
-      }
-    )
+  // ================= GET LIST =================
+  const getBrands = async (params?: BrandsQuery) => {
+    const res = await $api<BrandResponse>('/api/v1/private/brand', {
+      method: 'GET',
+      query: params
+    })
+
+    masterBrands.value = res.data?.brands || []
+
+    return res
   }
 
-  const createBrand = async (
-    payload: {
-      name: string
-      profileImageUrl: string
-    }
-  ) => {
-    return await $api(
-      '/api/v1/private/brand',
-      {
-        method: 'POST',
-        body: payload
-      }
-    )
+  // ================= CREATE =================
+  const createBrand = async (payload: {
+    name: string
+    profileImageUrl: string
+  }) => {
+    return await $api('/api/v1/private/brand', {
+      method: 'POST',
+      body: payload
+    })
   }
 
+  // ================= UPDATE =================
   const updateBrand = async (
     id: string,
     payload: {
@@ -40,24 +35,17 @@ export const useBrand = () => {
       profileImageUrl: string
     }
   ) => {
-    return await $api(
-      `/api/v1/private/brand/${id}`,
-      {
-        method: 'PUT',
-        body: payload
-      }
-    )
+    return await $api(`/api/v1/private/brand/${id}`, {
+      method: 'PUT',
+      body: payload
+    })
   }
 
-  const deleteBrand = async (
-    id: string
-  ) => {
-    return await $api(
-      `/api/v1/private/brand/${id}`,
-      {
-        method: 'DELETE'
-      }
-    )
+  // ================= DELETE =================
+  const deleteBrand = async (id: string) => {
+    return await $api(`/api/v1/private/brand/${id}`, {
+      method: 'DELETE'
+    })
   }
 
   return {

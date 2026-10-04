@@ -22,15 +22,19 @@ const sidebarMenu = [
     to: '/',
     type: 'item'
   },
+
   {
     label: 'Products',
     icon: 'lucide:box',
+    to: '/products',
+    type: 'item'
+  },
+
+  {
+    label: 'Product Settings',
+    icon: 'lucide:settings-2',
     type: 'group',
     children: [
-      {
-        label: 'All Products',
-        to: '/products'
-      },
       {
         label: 'Collections',
         to: '/products/collections'
@@ -45,9 +49,10 @@ const sidebarMenu = [
       }
     ]
   },
+
   {
     label: 'Product Setup',
-    icon: 'lucide:settings-2',
+    icon: 'lucide:sliders-horizontal',
     type: 'group',
     children: [
       {
@@ -60,23 +65,14 @@ const sidebarMenu = [
       }
     ]
   },
-    {
+
+  {
     label: 'Sale Product',
     icon: 'lucide:percent',
-    type: 'item',
     to: '/sales',
+    type: 'item'
   },
-  // {
-  //   label: 'Customers',
-  //   icon: 'lucide:users',
-  //   type: 'group',
-  //   children: [
-  //     {
-  //       label: 'Customer List',
-  //       to: '/customers'
-  //     }
-  //   ]
-  // },
+
   {
     label: 'Settings',
     icon: 'lucide:settings',

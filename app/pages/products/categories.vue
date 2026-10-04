@@ -69,8 +69,6 @@ const fetchCategories = async () => {
 
     categories.value = res?.categories ?? []
     total.value = res?.total ?? 0
-    console.log(res)
-
   } catch (err: any) {
     message.error(err?.message || 'Failed fetch categories')
   } finally {

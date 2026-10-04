@@ -160,6 +160,7 @@ const handleSubmitUser = async () => {
       name: formState.value.name,
       email: formState.value.email,
       role: formState.value.role,
+      password: formState.value.password,
       isActive: formState.value.isActive === 'true'
     }
 

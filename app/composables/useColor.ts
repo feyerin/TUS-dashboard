@@ -1,55 +1,49 @@
-import type { ApiResponse } from "~/type/category"
-import type { Color, ColorPayload, ColorListResponse } from "~/type/color"
+import type { ApiResponse } from '~/type/category'
+import type { Color, ColorPayload, ColorListResponse } from '~/type/color'
 
 export const useColor = () => {
   const { $api } = useNuxtApp()
+  const { colors: masterColors } = useMasterData()
 
   // ================= GET LIST =================
-  const getColors = async (
-    params?: any
-  ): Promise<ApiResponse<ColorListResponse>> => {
-    return await $api('/api/v1/private/color', {
+  const getColors = async (params?: any): Promise<ApiResponse<ColorListResponse>> => {
+    const res = await $api('/api/v1/private/color', {
       method: 'GET',
-      params,
-    })
+      params
+    }) as ApiResponse<ColorListResponse>
+
+    masterColors.value = res.data?.colors || []
+
+    return res
   }
 
   // ================= GET DETAIL =================
-  const getColorById = (
-    id: number | string
-  ): Promise<ApiResponse<Color>> => {
+  const getColorById = (id: number | string): Promise<ApiResponse<Color>> => {
     return $api(`/api/v1/private/color/${id}`, {
-      method: 'GET',
+      method: 'GET'
     })
   }
 
   // ================= CREATE =================
-  const createColor = (
-    payload: ColorPayload
-  ): Promise<ApiResponse<Color>> => {
+  const createColor = (payload: ColorPayload): Promise<ApiResponse<Color>> => {
     return $api('/api/v1/private/color', {
       method: 'POST',
-      body: payload,
+      body: payload
     })
   }
 
   // ================= UPDATE =================
-  const updateColor = (
-    id: number | string,
-    payload: ColorPayload
-  ): Promise<ApiResponse<Color>> => {
+  const updateColor = (id: number | string, payload: ColorPayload): Promise<ApiResponse<Color>> => {
     return $api(`/api/v1/private/color/${id}`, {
       method: 'PUT',
-      body: payload,
+      body: payload
     })
   }
 
   // ================= DELETE =================
-  const deleteColor = (
-    id: number | string
-  ): Promise<ApiResponse<null>> => {
+  const deleteColor = (id: number | string): Promise<ApiResponse<null>> => {
     return $api(`/api/v1/private/color/${id}`, {
-      method: 'DELETE',
+      method: 'DELETE'
     })
   }
 
@@ -58,6 +52,6 @@ export const useColor = () => {
     getColorById,
     createColor,
     updateColor,
-    deleteColor,
+    deleteColor
   }
 }

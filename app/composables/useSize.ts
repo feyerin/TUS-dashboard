@@ -1,5 +1,3 @@
-// composables/useSize.ts
-
 export interface Size {
   id: number
   name: string
@@ -16,7 +14,6 @@ type SizeListResponse = {
   data?: {
     sizes?: Size[]
   }
-
   pagination?: {
     page: number
     limit: number
@@ -26,93 +23,58 @@ type SizeListResponse = {
 }
 
 export const useSize = () => {
-  const { $api } =
-    useNuxtApp()
+  const { $api } = useNuxtApp()
+  const { sizes: masterSizes } = useMasterData()
 
   // ================= GET LIST =================
-  const getSizes = async (
-    params?: Record<
-      string,
-      any
-    >
-  ) => {
-    const res =
-      (await $api(
-        '/api/v1/private/size',
-        {
-          method: 'GET',
-          params
-        }
-      )) as SizeListResponse
+  const getSizes = async (params?: Record<string, any>) => {
+    const res = (await $api('/api/v1/private/size', {
+      method: 'GET',
+      params
+    })) as SizeListResponse
+
+    const sizes = res.data?.sizes || []
+
+    // Update master data
+    masterSizes.value = sizes
 
     return {
-      sizes:
-        res.data?.sizes ||
-        [],
-
-      pagination:
-        res.pagination
+      sizes,
+      pagination: res.pagination
     }
   }
 
   // ================= GET DETAIL =================
-  const getSizeById =
-    async (
-      id: number | string
-    ) => {
-      const res =
-        await $api(
-          `/api/v1/private/size/${id}`,
-          {
-            method: 'GET'
-          }
-        )
+  const getSizeById = async (id: number | string) => {
+    const res = await $api(`/api/v1/private/size/${id}`, {
+      method: 'GET'
+    })
 
-      return (res as any)
-        ?.data
-    }
+    return (res as any)?.data
+  }
 
   // ================= CREATE =================
-  const createSize =
-    async (
-      payload: SizePayload
-    ) => {
-      return await $api(
-        '/api/v1/private/size',
-        {
-          method: 'POST',
-          body: payload
-        }
-      )
-    }
+  const createSize = async (payload: SizePayload) => {
+    return await $api('/api/v1/private/size', {
+      method: 'POST',
+      body: payload
+    })
+  }
 
   // ================= UPDATE =================
-  const updateSize =
-    async (
-      id: number | string,
-      payload: SizePayload
-    ) => {
-      return await $api(
-        `/api/v1/private/size/${id}`,
-        {
-          method: 'PUT',
-          body: payload
-        }
-      )
-    }
+  const updateSize = async (id: number | string, payload: SizePayload) => {
+    return await $api(`/api/v1/private/size/${id}`, {
+      method: 'PUT',
+      body: payload
+    })
+  }
 
   // ================= DELETE =================
-  const deleteSize =
-    async (
-      id: number | string
-    ) => {
-      return await $api(
-        `/api/v1/private/size/${id}`,
-        {
-          method: 'DELETE'
-        }
-      )
-    }
+  const deleteSize = async (id: number | string) => {
+    return await $api(`/api/v1/private/size/${id}`, {
+      method: 'DELETE'
+    })
+  }
 
   return {
     getSizes,

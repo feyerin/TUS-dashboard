@@ -2,19 +2,23 @@ import type { CategoryQuery } from '~/type/category'
 
 export const useCategory = () => {
   const { $api } = useNuxtApp()
+  const { categories: masterCategories } = useMasterData()
 
   // ================= GET =================
   const getCategories = async (params?: CategoryQuery) => {
     const res: any = await $api('/api/v1/private/category', {
       method: 'GET',
-      params,
+      params
     })
 
     const data = res?.data
+    const categories = data?.categories ?? []
+
+    masterCategories.value = categories
 
     return {
-      categories: data?.categories ?? [],
-      total: res?.pagination?.totalItems ?? 0,
+      categories,
+      total: res?.pagination?.totalItems ?? 0
     }
   }
 
@@ -22,7 +26,7 @@ export const useCategory = () => {
   const createCategory = async (payload: { name: string }) => {
     return await $api('/api/v1/private/category', {
       method: 'POST',
-      body: payload,
+      body: payload
     })
   }
 
@@ -33,14 +37,14 @@ export const useCategory = () => {
   ) => {
     return await $api(`/api/v1/private/category/${id}`, {
       method: 'PUT',
-      body: payload,
+      body: payload
     })
   }
 
   // ================= DELETE =================
   const deleteCategory = async (id: string) => {
     return await $api(`/api/v1/private/category/${id}`, {
-      method: 'DELETE',
+      method: 'DELETE'
     })
   }
 
@@ -48,6 +52,6 @@ export const useCategory = () => {
     getCategories,
     createCategory,
     updateCategory,
-    deleteCategory,
+    deleteCategory
   }
 }
