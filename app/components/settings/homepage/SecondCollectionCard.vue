@@ -159,6 +159,10 @@ onMounted(fetchSection)
       <div>
         <p class="text-sm text-gray-500 mb-3">
           Upload gambar collection
+
+           <span class="italic">
+            (recommended size 1200 x 600)
+          </span>
         </p>
 
         <a-upload
@@ -189,7 +193,7 @@ onMounted(fetchSection)
 
         <a-input
           v-model:value="form.buttonLink"
-          placeholder="Button Link"
+          placeholder="https://directed-link.com"
         />
       </div>
 

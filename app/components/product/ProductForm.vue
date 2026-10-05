@@ -547,161 +547,62 @@ const submit = () => {
 
           <!-- MARKETPLACE LINKS -->
           <a-card class="mb-4 rounded-2xl">
-
             <template #title>
-              <span>
-                Marketplace Links
-                <span class="text-red-500">*</span>
-              </span>
+              <span>Marketplace Links <span class="text-red-500">*</span></span>
             </template>
 
             <div class="space-y-4">
-
-              <div
-                v-for="(
-                  link,
-                  index
-                ) in links"
-                :key="index"
-                class="border rounded-xl p-4 space-y-3"
-              >
-
+              <div v-for="(link, index) in links" :key="index" class="space-y-3 rounded-xl border p-4">
                 <!-- TOP -->
-                <div
-                  class="flex items-center justify-between"
-                >
-
-                  <div
-                    class="font-medium text-sm"
-                  >
-                    Link #{{ index + 1 }}
-                  </div>
-
-                  <a-button
-                    danger
-                    type="text"
-                    @click="
-                      links.splice(
-                        index,
-                        1
-                      )
-                    "
-                    v-if="
-                      links.length > 1
-                    "
-                  >
+                <div class="flex items-center justify-between">
+                  <div class="text-sm font-medium">Link #{{ index + 1 }}</div>
+                  <a-button v-if="links.length > 1" danger type="text" @click="links.splice(index, 1)">
                     Remove
                   </a-button>
-
                 </div>
 
                 <!-- LABEL -->
                 <div>
-
-                  <p
-                    class="text-sm font-medium mb-2"
-                  >
-                    Label
-                    <span
-                      class="text-red-500"
-                    >*</span>
+                  <p class="mb-2 text-sm font-medium">
+                    Label <span class="text-red-500">*</span>
                   </p>
-
-                  <a-input
-                    v-model:value="
-                      link.label
-                    "
-                    placeholder="Tokopedia Official"
-                    class="rounded-md"
-                  />
-
+                  <a-input v-model:value="link.label" placeholder="Tokopedia Official" class="rounded-md" />
                 </div>
 
                 <!-- TYPE -->
                 <div>
-
-                  <p
-                    class="text-sm font-medium mb-2"
-                  >
-                    Marketplace
-                    <span
-                      class="text-red-500"
-                    >*</span>
+                  <p class="mb-2 text-sm font-medium">
+                    Marketplace <span class="text-red-500">*</span>
                   </p>
-
-                  <a-select
-                    v-model:value="
-                      link.linkType
-                    "
-                    placeholder="Select marketplace"
-                    class="w-full rounded-md"
-                  >
-
-                    <a-select-option value="tokopedia">
-                      Tokopedia
-                    </a-select-option>
-
-                    <a-select-option value="shopee">
-                      Shopee
-                    </a-select-option>
-
-                    <a-select-option value="tiktok">
-                      TikTok Shop
-                    </a-select-option>
-
-                    <a-select-option value="lazada">
-                      Lazada
-                    </a-select-option>
-
-                    <a-select-option value="blibli">
-                      Blibli
-                    </a-select-option>
-
+                  <a-select v-model:value="link.linkType" placeholder="Select marketplace" class="w-full rounded-md">
+                    <a-select-option value="tokopedia">Tokopedia</a-select-option>
+                    <a-select-option value="shopee">Shopee</a-select-option>
+                    <a-select-option value="tiktok">TikTok Shop</a-select-option>
+                    <a-select-option value="lazada">Lazada</a-select-option>
+                    <a-select-option value="blibli">Blibli</a-select-option>
                   </a-select>
-
                 </div>
 
                 <!-- URL -->
                 <div>
-
-                  <p
-                    class="text-sm font-medium mb-2"
-                  >
-                    URL
-                    <span
-                      class="text-red-500"
-                    >*</span>
+                  <p class="mb-2 text-sm font-medium">
+                    URL <span class="text-red-500">*</span>
                   </p>
-
-                  <a-input
-                    v-model:value="
-                      link.url
-                    "
-                    placeholder="https://..."
-                    class="rounded-md"
-                  />
-
+                  <a-input v-model:value="link.url" placeholder="https://..." class="rounded-md" />
                 </div>
-
               </div>
 
               <!-- ADD -->
-              <!-- <a-button
+              <!--
+              <a-button
                 block
                 class="rounded-md"
-                @click="
-                  links.push({
-                    label: '',
-                    linkType: '',
-                    url: ''
-                  })
-                "
+                @click="links.push({ label: '', linkType: '', url: '' })"
               >
                 + Add Marketplace Link
-              </a-button> -->
-
+              </a-button>
+              -->
             </div>
-
           </a-card>
 
           <!-- PRICING -->
@@ -957,15 +858,10 @@ const submit = () => {
               <div>
                 <a-select
                   v-model:value="form.seoTag"
-                  mode="multiple"
-                  placeholder="Select tags"
-                  class="w-full rounded-md"
-                  :options="
-                    tags.map(tag => ({
-                      label: tag.name,
-                      value: tag.name
-                    }))
-                  "
+                  mode="tags"
+                  placeholder="Enter tags"
+                  class="w-full"
+                  :token-separators="[',']"
                 />
               </div>
 
