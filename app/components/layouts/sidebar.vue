@@ -49,7 +49,6 @@ const sidebarMenu = [
       }
     ]
   },
-
   {
     label: 'Product Setup',
     icon: 'lucide:sliders-horizontal',
@@ -65,14 +64,12 @@ const sidebarMenu = [
       }
     ]
   },
-
   {
     label: 'Sale Product',
     icon: 'lucide:percent',
     to: '/sales',
     type: 'item'
   },
-
   {
     label: 'Settings',
     icon: 'lucide:settings',
@@ -81,6 +78,10 @@ const sidebarMenu = [
       {
         label: 'Homepage',
         to: '/settings/homepage'
+      },
+      {
+        label: 'OEM',
+        to: '/oem'
       },
       {
         label: 'General',
