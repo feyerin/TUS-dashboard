@@ -28,11 +28,30 @@ const selectedId = ref<string | null>(null)
 
 const formState = ref({
   name: '',
-  collectionId: undefined as string | undefined
+  collections: [] as {
+    collectionId: string
+    rank: number
+  }[]
 })
 
 let isFetching = false
 let searchTimeout: any
+
+const selectedCollections = computed({
+  get: () => formState.value.collections.map(item => item.collectionId),
+  set: (ids: string[]) => {
+    formState.value.collections = ids.map((id, index) => {
+      const existing = formState.value.collections.find(
+        item => item.collectionId === id
+      )
+
+      return existing ?? {
+        collectionId: id,
+        rank: index
+      }
+    })
+  }
+})
 
 // ================= COMPUTED =================
 const collectionOptions = computed(() => {
@@ -120,7 +139,7 @@ const openCreateModal = () => {
 
   formState.value = {
     name: '',
-    collectionId: undefined
+    collections: []
   }
 
   isModalOpen.value = true
@@ -132,7 +151,8 @@ const openEditModal = (record: any) => {
 
   formState.value = {
     name: record.name,
-    collectionId: record.collectionId
+    collections: record.collectionIds
+      ?? (record.collectionId ? [record.collectionId] : [])
   }
 
   isModalOpen.value = true
@@ -145,18 +165,18 @@ const resetModal = () => {
 
   formState.value = {
     name: '',
-    collectionId: undefined
+    collections: []
   }
 }
 
 // ================= SUBMIT =================
 const handleSubmit = async () => {
-  if (!formState.value.name) {
+  if (!formState.value.name.trim()) {
     message.warning('Category name is required')
     return
   }
 
-  if (!formState.value.collectionId) {
+  if (!formState.value.collections.length) {
     message.warning('Collection is required')
     return
   }
@@ -166,7 +186,10 @@ const handleSubmit = async () => {
   try {
     const payload = {
       name: formState.value.name,
-      collectionId: formState.value.collectionId
+      collections: formState.value.collections.map((item, index) => ({
+        collectionId: item.collectionId,
+        rank: item.rank ?? index
+      }))
     }
 
     if (isEditMode.value && selectedId.value) {
@@ -178,9 +201,9 @@ const handleSubmit = async () => {
     }
 
     resetModal()
-    fetchCategories()
+    await fetchCategories()
   } catch (err: any) {
-    message.error(err?.message || 'Submit failed')
+    message.error(err?.data?.error?.message || err?.message || 'Submit failed')
   } finally {
     submitting.value = false
   }
@@ -300,9 +323,7 @@ onMounted(async () => {
             <template v-else-if="column.key === 'collection'">
               <span class="text-gray-500 text-sm">
                 {{
-                  collectionMap[
-                    record.collectionId
-                  ] || '-'
+                  record.collections?.map((item: any) => item.name).join(', ') || '-'
                 }}
               </span>
             </template>
@@ -351,12 +372,17 @@ onMounted(async () => {
               />
             </a-form-item>
 
-            <a-form-item label="Collection" required>
+            <a-form-item label="Collections" required>
               <a-select
-                v-model:value="formState.collectionId"
+                v-model:value="selectedCollections"
+                mode="multiple"
                 :options="collectionOptions"
-                placeholder="Select collection"
+                placeholder="Select collections"
                 size="large"
+                show-search
+                allow-clear
+                option-filter-prop="label"
+                style="width: 100%"
               />
             </a-form-item>
           </a-form>

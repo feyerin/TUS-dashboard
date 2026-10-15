@@ -169,22 +169,18 @@ onMounted(fetchAssignedProducts)
 <template>
   <client-only>
     <div class="space-y-6">
-    <div class="bg-transparent pl-6 mt-2">
-        <a-breadcrumb>
-            <a-breadcrumb-item>
-            Dashboard
-            </a-breadcrumb-item>
-
-            <a-breadcrumb-item>
-            Sale Assignment
-            </a-breadcrumb-item>
-        </a-breadcrumb>
-    </div>
       <div class="bg-white rounded-2xl">
+        
         <a-page-header
           title="Sale Product"
           sub-title="Assign products to Sale"
         >
+          <template #breadcrumb>
+            <a-breadcrumb>
+              <a-breadcrumb-item>Dashboard</a-breadcrumb-item>
+              <a-breadcrumb-item>Brands</a-breadcrumb-item>
+            </a-breadcrumb>
+          </template>
           <template #extra>
             <a-button
               type="primary"
