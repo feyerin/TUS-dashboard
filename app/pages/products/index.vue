@@ -167,6 +167,7 @@ const deleteProduct = (record: any) => {
 onMounted(fetchProducts)
 
 onMounted(async () => {
+  console.log("fetch")
   await fetchAll()
 })
 </script>

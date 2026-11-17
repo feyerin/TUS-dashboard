@@ -33,6 +33,7 @@ const {
   tags
 } = useMasterData()
 
+const { fetchAll } = useMasterData()
 const { uploadFile } = useProductApi()
 
 // ================= STATE =================
@@ -335,6 +336,10 @@ watch(
     immediate: true
   }
 )
+
+onMounted(async () => {
+  await fetchAll(true)
+})
 </script>
 
 <template>

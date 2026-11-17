@@ -49,8 +49,8 @@ type TagResponse = {
 export const useMasterData = () => {
   const { $api } = useNuxtApp()
 
-  const fetchAll = async () => {
-    if (loaded.value) return
+  const fetchAll = async (force = false) => {
+    if (loaded.value && !force) return
 
     try {
       const [
@@ -66,23 +66,28 @@ export const useMasterData = () => {
         }),
 
         $api('/api/v1/private/color', {
-          method: 'GET'
+          method: 'GET',
+          query: { page: 1, limit: 1000 }
         }),
 
         $api('/api/v1/private/size', {
-          method: 'GET'
+          method: 'GET',
+          query: { page: 1, limit: 1000 }
         }),
 
         $api('/api/v1/private/brand', {
-          method: 'GET'
+          method: 'GET',
+          query: { page: 1, limit: 1000 }
         }),
 
         $api('/api/v1/private/collection', {
-          method: 'GET'
+          method: 'GET',
+          query: { page: 1, limit: 1000 }
         }),
 
         $api('/api/v1/private/tag', {
-          method: 'GET'
+          method: 'GET',
+          query: { page: 1, limit: 1000 }
         })
       ])
 
