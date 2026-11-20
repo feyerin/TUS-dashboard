@@ -445,7 +445,7 @@ onMounted(async () => {
               </a-upload>
 
               <span class="text-xs text-gray-400 font-secondary font-normal italic text-end mt-1">
-                Recommended image ratio: 3:2
+                Recommended image ratio: 3:4
               </span>
             </div>
 
@@ -677,7 +677,7 @@ onMounted(async () => {
             </div>
 
             <span class="text-xs text-gray-400 font-secondary font-normal italic text-end mt-1">
-              Recommended image ratio: 3:2
+              Recommended image ratio: 3:4
             </span>
 
           </a-card>
