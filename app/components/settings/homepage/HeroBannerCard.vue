@@ -166,7 +166,7 @@ onMounted(async () => {
         <p class="text-sm text-gray-500 mb-4">
           Upload dan drag gambar untuk mengatur urutan banner
           <span class="italic">
-            (recommended size 1456 x 3000)
+            (recommended size 1920 × 1080 px)
           </span>
         </p>
 
