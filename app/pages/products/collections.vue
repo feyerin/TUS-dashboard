@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { CollectionResponse } from '~/type/collection'
 
+// ================= COMPOSABLES =================
 useHead({
   title: 'Collections • Dashboard'
 })
@@ -14,6 +15,7 @@ const {
   deleteCollection
 } = useCollection()
 
+// ================= STATE =================
 const collections = ref<any[]>([])
 const loading = ref(false)
 const total = ref(0)
@@ -31,12 +33,13 @@ const selectedId = ref<string | null>(null)
 
 const formState = ref({
   name: '',
-  slug: ''
+  slug: '',
+  rank: 0 as number | undefined
 })
 
 let isFetching = false
 
-// ================= FETCH =================
+// ================= FUNCTIONS =================
 const fetchCollections = async () => {
   if (isFetching) return
 
@@ -69,7 +72,6 @@ const fetchCollections = async () => {
   }
 }
 
-// ================= FILTER =================
 const applyFilter = () => {
   page.value = 1
   fetchCollections()
@@ -82,18 +84,16 @@ const resetFilter = () => {
   fetchCollections()
 }
 
-// ================= TABLE =================
 const handleTableChange = (pagination: any) => {
   page.value = pagination.current
   limit.value = pagination.pageSize
   fetchCollections()
 }
 
-// ================= MODAL =================
 const openCreateModal = () => {
   isEditMode.value = false
   selectedId.value = null
-  formState.value = { name: '', slug: '' }
+  formState.value = { name: '', slug: '', rank: 0 }
   isModalOpen.value = true
 }
 
@@ -102,7 +102,8 @@ const openEditModal = (record: any) => {
   selectedId.value = record.id
   formState.value = {
     name: record.name,
-    slug: record.slug
+    slug: record.slug,
+    rank: record.rank ?? 0
   }
   isModalOpen.value = true
 }
@@ -111,7 +112,7 @@ const resetModal = () => {
   isModalOpen.value = false
   isEditMode.value = false
   selectedId.value = null
-  formState.value = { name: '', slug: '' }
+  formState.value = { name: '', slug: '', rank: 0 }
 }
 
 const handleSubmit = async () => {
@@ -125,7 +126,8 @@ const handleSubmit = async () => {
   try {
     const payload = {
       name: formState.value.name,
-      slug: formState.value.slug
+      slug: formState.value.slug,
+      rank: formState.value.rank ?? 0
     }
 
     if (isEditMode.value && selectedId.value) {
@@ -146,7 +148,6 @@ const handleSubmit = async () => {
   }
 }
 
-// ================= DELETE =================
 const handleDelete = (record: any) => {
   Modal.confirm({
     title: 'Delete Collection',
@@ -158,13 +159,13 @@ const handleDelete = (record: any) => {
         message.success('Deleted')
         fetchCollections()
       } catch (err: any) {
-        message.error(err?.data.error.message || 'Delete failed')
+        message.error(err?.data?.error?.message || 'Delete failed')
       }
     }
   })
 }
 
-// ================= INIT =================
+// ================= LIFECYCLE =================
 onMounted(fetchCollections)
 </script>
 
@@ -291,6 +292,20 @@ onMounted(fetchCollections)
           @change="handleTableChange"
         >
 
+          <!-- RANK -->
+          <a-table-column
+            title="Rank"
+            data-index="rank"
+            key="rank"
+            :width="80"
+          >
+            <template #default="{ record }">
+              <span class="text-sm text-gray-500">
+                {{ record.rank ?? '-' }}
+              </span>
+            </template>
+          </a-table-column>
+
           <!-- NAME -->
           <a-table-column
             title="Name"
@@ -398,6 +413,19 @@ onMounted(fetchCollections)
 
           <a-form-item label="Slug">
             <a-input v-model:value="formState.slug" />
+          </a-form-item>
+
+          <a-form-item
+            label="Rank"
+            extra="Urutan collection. Angka lebih kecil tampil lebih dulu."
+          >
+            <a-input-number
+              v-model:value="formState.rank"
+              :min="0"
+              :precision="0"
+              placeholder="Enter rank"
+              style="width: 100%"
+            />
           </a-form-item>
 
         </a-form>
