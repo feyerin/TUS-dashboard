@@ -345,7 +345,7 @@ onMounted(fetchBrands)
           </div>
 
           <span class="text-xs text-gray-400 font-secondary font-normal italic text-end mt-1">
-            Recommended image ratio: 3:4
+            Recommended image ratio: 4:3
           </span>
         </div>
       </a-modal>
